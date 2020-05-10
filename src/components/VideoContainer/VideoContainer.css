@@ -1,0 +1,12 @@
+.VideoContainer {
+    position: relative;
+    padding-bottom: 56.25%;
+    z-index: 1;
+    background-color: rgb(var(--foreground-color), 0.15);
+}
+
+.VideoContainer iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}

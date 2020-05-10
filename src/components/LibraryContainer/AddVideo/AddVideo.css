@@ -1,0 +1,33 @@
+.AddVideo {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 14px;
+}
+
+.AddVideo-deck {
+    display: flex;
+    flex-grow: 1;
+}
+
+.AddVideo-deck-button {
+    display: flex;
+    align-self: center;
+}
+
+.AddVideo-deck-button:first-child .MuiSvgIcon-root {
+    margin-left: -4px;
+    cursor: default;
+}
+
+.AddVideo-deck-button.close .MuiSvgIcon-root {
+    cursor: pointer;
+}
+
+.AddVideo-deck-input {
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.AddVideo-results {
+    padding-top: 8px;
+}

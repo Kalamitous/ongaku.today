@@ -1,0 +1,57 @@
+.ControlDeck {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+.ControlDeck-header {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    align-items: baseline;
+    min-width: 0;
+    height: 20px; /* fix height to handle special characters in video title */
+    margin: 8px 0 8px 0;
+}
+
+.ControlDeck-header h5 {
+    line-height: 1.2; /* also to handle special characters */
+}
+
+.ControlDeck-header-center {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ControlDeck-header-left {
+    padding-right: 8px;
+}
+
+.ControlDeck-header-right {
+    padding-left: 8px;
+}
+
+.ControlDeck-footer {
+    display: flex;
+    flex-basis: 100%;
+    justify-content: space-between;
+}
+
+.ControlDeck-footer-left, .ControlDeck-footer-center, .ControlDeck-footer-right {
+    display: flex;
+    flex-basis: 128px;
+    margin: 8px 0 8px 0;
+}
+
+.ControlDeck-footer-left {
+    justify-content: flex-start;
+}
+
+.ControlDeck-footer-center {
+    justify-content: center;
+}
+
+.ControlDeck-footer-right {
+    justify-content: flex-end;
+}

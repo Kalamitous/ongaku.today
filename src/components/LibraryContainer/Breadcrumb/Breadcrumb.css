@@ -1,0 +1,39 @@
+.Breadcrumb {
+    display: flex;
+    flex-shrink: 0;
+}
+
+.Breadcrumb-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.Breadcrumb-button h3 {
+    min-width: 1px; /* edit cursor needs room to display when empty */
+}
+
+.Breadcrumb-button h3:focus {
+    outline: none;
+}
+
+.Breadcrumb-button-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.Breadcrumb-chevron {
+    display: flex;
+    align-self: center;
+}
+
+.Breadcrumb-chevron .MuiSvgIcon-root {
+    cursor: default;
+}
+
+.Breadcrumb:last-child .Breadcrumb-chevron {
+    display: none;
+}

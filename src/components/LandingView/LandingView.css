@@ -1,0 +1,34 @@
+.LandingView {
+    display: flex;
+    position: relative;
+}
+
+.LandingView-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding-bottom: 20%;
+}
+
+.LandingView-container-title, .LandingView-container-caption {
+    padding-bottom: 12px;
+}
+
+.LandingView-container-title span {
+    color: rgb(var(--highlight-color));
+}
+
+.LandingView-privacy {
+    position: absolute;
+    bottom: 0;
+}
+
+.LandingView-privacy p {
+    color: rgba(var(--foreground-color), 0.5);
+}
+
+#LandingView-container-button {
+    height: 50px;
+    padding-top: 12px;
+}

@@ -1,0 +1,32 @@
+.Header {
+    display: flex;
+}
+
+.Header-tree {
+    align-self: center;
+    overflow: hidden;
+}
+
+.Header-tree-inner {
+    display: flex;
+}
+
+.Header-buttonContainer {
+    display: flex;
+    flex-shrink: 0;
+    margin-left: 8px;
+}
+
+.Header-buttonContainer p {
+    margin: 8px 8px 8px 4px;
+}
+
+.Header-buttonContainer-button {
+    display: flex;
+    cursor: pointer;
+}
+
+.Header-buttonContainer-button .MuiSvgIcon-root {
+    align-self: center;
+    margin: 8px 0px 8px 8px;
+}

@@ -1,0 +1,15 @@
+.VideoList {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.VideoList-list {
+    outline: none;
+    overflow-y: overlay;
+}
+
+.drag {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}

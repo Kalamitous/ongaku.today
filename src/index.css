@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+    --foreground-color: 0, 0, 0;
+    --midground-color: 255, 255, 255;
+    --background-color: 255, 255, 255;
+    --highlight-color: 	156, 241, 150;
+}
+
+body.dark-mode {
+    --foreground-color: 255, 255, 255;
+    --midground-color: 38, 38, 38;
+    --background-color: 0, 0, 0;
+    --highlight-color: 156, 241, 150;
+}
+
+body {
+    height: 100vh;
+    min-width: 1024px;
+	font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    background-color: rgb(var(--background-color));
+    overflow: hidden;
+}
+
+p {
+    font-size: 1em;
+    color: rgb(var(--foreground-color));
+}
+
+h1, h1 .MuiSvgIcon-root {
+    font-size: 8em;
+    color: rgb(var(--foreground-color));
+}
+
+h2, h2 .MuiSvgIcon-root {
+    font-size: 4em;
+    color: rgb(var(--foreground-color));
+}
+
+h3, h3 .MuiSvgIcon-root {
+    font-size: 2.05em;
+    color: rgb(var(--foreground-color));
+}
+
+h4, h4 .MuiSvgIcon-root {
+    font-size: 1.67em;
+    color: rgb(var(--foreground-color));
+}
+
+h5, h5 .MuiSvgIcon-root {
+    font-size: 1.15em;
+    font-weight: lighter;
+    color: rgb(var(--foreground-color));
+}
+
+a {
+    text-decoration: none;
+}
+
+input {
+    flex-grow: 1;
+    padding: 4px;
+    border: 1px solid rgb(var(--foreground-color));
+    outline: none;
+}
+
+input::placeholder {
+    color: rgba(0, 0, 0, 0.5)
+}
+
+svg.MuiSvgIcon-root {
+    display: flex;
+    font-size: 1.25em;
+    color: rgb(var(--foreground-color));
+    cursor: pointer;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: rgb(var(--foreground-color));
+}
+
+@media only screen and (max-width: 1366px) {
+    body {
+        font-size: 12px;
+    }
+}

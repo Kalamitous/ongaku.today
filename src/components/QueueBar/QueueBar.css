@@ -1,0 +1,26 @@
+.QueueBar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.QueueBar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.QueueBar-header-right {
+    display: flex;
+}
+
+.QueueBar-header-buttons {
+    display: flex;
+    margin: 8px 0 8px 0;
+}
+
+.QueueBar-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}

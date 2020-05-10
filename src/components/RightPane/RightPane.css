@@ -1,0 +1,16 @@
+.RightPane {
+    display: flex;
+    flex-direction: column;
+    min-width: 40%;
+    max-width: 40%;
+}
+
+.RightPane-divider {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(var(--foreground-color), 0.15);
+}
+
+.MuiSvgIcon-root.active {
+    color: rgb(var(--highlight-color));
+}
