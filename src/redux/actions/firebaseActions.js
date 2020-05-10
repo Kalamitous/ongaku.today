@@ -1,5 +1,5 @@
 import { firebase } from '../../util/globals'
-import { youtubeConfig } from '../../config/youtube'
+import { youtubeConfig } from '../../config'
 
 export const initAuth = () => {
     return dispatch => { 

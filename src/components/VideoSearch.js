@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { youtubeConfig } from '../config/youtube'
+import { youtubeConfig } from '../config'
 
 const API_KEY = youtubeConfig.apiKey
 
