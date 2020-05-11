@@ -71,7 +71,9 @@ const ActionButtons = props => {
             <h5>
                 {props.handleMore ? 
                     <MoreHoriz onClick={handleMore} /> :
-                    props.handleRemove ? <Remove onClick={handleRemove} /> : null
+                    !props.handleToggle && props.handleRemove ?
+                        <Remove onClick={handleRemove} /> :
+                        null
                 }
             </h5>
             <h4 className="ActionButtons-dragHandle">{props.draggable ? <DragHandle /> : null}</h4>
