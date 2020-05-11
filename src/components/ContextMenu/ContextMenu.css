@@ -52,6 +52,12 @@
     width: 8px;
 }
 
+@-moz-document url-prefix() {
+    .ContextMenu-marginHackContainer-marginHack {
+        width: 0px;
+    }
+}
+
 .title {
     pointer-events: none;
 }

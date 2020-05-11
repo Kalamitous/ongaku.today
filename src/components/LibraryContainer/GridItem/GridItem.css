@@ -21,11 +21,8 @@
 }
 
 .FolderItem h5:focus {
-    text-overflow: clip;
-}
-
-.FolderItem h5:focus {
     outline: none;
+    text-overflow: clip;
 }
 
 .FolderItem-text {

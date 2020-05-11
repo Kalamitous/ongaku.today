@@ -50,12 +50,13 @@ const GridItem = props => {
         removeItem(id)
     }
     const handleEdit = () => {
-        ref.current.innerText = ''
+        // set to zero-width character to align caret on firefox
+        ref.current.innerText = '\u200b'
         ref.current.focus()
     }
     const handleBlur = event => {
         const text = event.target.innerText
-        if (text !== '') {
+        if (text !== '\u200b') {
             setItemName(id, text)
         } else {
             event.target.innerText = name

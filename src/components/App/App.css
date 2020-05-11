@@ -4,6 +4,8 @@
     height: calc(100vh - 144px);
     padding: 72px;
     padding-right: calc(72px + 84px);
+    /* allows scrollbar on firefox to change color */
+    background-color: rgb(var(--background-color));
 }
 
 .Page {
