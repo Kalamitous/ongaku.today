@@ -39,8 +39,7 @@ const VideoSearch = Component => props => {
                 return
             }
             const url = `https://www.googleapis.com/youtube/v3/search?` +
-                `part=id` + 
-                `&safeSearch=strict` +
+                `part=id` +
                 `&maxResults=50` +
                 `&videoSyndicated=true` +
                 `&videoEmbeddable=true` +
