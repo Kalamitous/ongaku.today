@@ -23,8 +23,13 @@ const LeftPane = props => {
     const searchClick = () => setActive(2)
     const themeClick = () => {
         const body = document.querySelector('body')
-        body.classList.toggle('dark-mode')
-        localStorage.setItem('theme', body.classList.value)
+        if (body.classList.contains('dark-mode')) {
+            body.classList.remove('dark-mode')
+            localStorage.removeItem('theme')
+        } else {
+            body.classList.add('dark-mode')
+            localStorage.setItem('theme', 'dark-mode')
+        }
     }
 
     return (
