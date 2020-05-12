@@ -22,7 +22,7 @@ const Privacy = () => (
         </h5>
         <br />
         <br />
-        <Link to="/"><h2><KeyboardReturn /></h2></Link>
+        <Link to="/"><h2 title="Return"><KeyboardReturn /></h2></Link>
     </div>
 )
 

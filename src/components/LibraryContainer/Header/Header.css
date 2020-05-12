@@ -4,6 +4,7 @@
 
 .Header-tree {
     align-self: center;
+    margin-right: 16px;
     overflow: hidden;
 }
 
@@ -13,16 +14,13 @@
 
 .Header-buttonContainer {
     display: flex;
-    flex-shrink: 0;
-    margin-left: 8px;
-}
-
-.Header-buttonContainer p {
-    margin: 8px 8px 8px 4px;
 }
 
 .Header-buttonContainer-button {
     display: flex;
+    flex-shrink: 0;
+    margin-left: 8px;
+    align-items: center;
     cursor: pointer;
 }
 

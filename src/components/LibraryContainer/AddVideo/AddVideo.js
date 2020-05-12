@@ -22,9 +22,12 @@ const AddVideo = props => {
     return (
         <div className="AddVideo">
             <div className="AddVideo-deck">
-                <h4 className={searchResultIds.length === 0 ? "AddVideo-deck-button" : "AddVideo-deck-button close"}>
-                    {searchResultIds.length === 0 ? <Add /> : <Close onClick={handleClose} />}
-                </h4>
+                {searchResultIds.length === 0 ? 
+                    <h4 className="AddVideo-deck-button"><Add /></h4> :
+                    <h4 title="Close search" className="AddVideo-deck-button close">
+                        <Close onClick={handleClose} />
+                    </h4>
+                }
                 <input
                     ref={ref}
                     size="1"
@@ -34,7 +37,9 @@ const AddVideo = props => {
                     onChange={handleInputChange}
                     onKeyDown={handleEnter}
                 />
-                <h4 className="AddVideo-deck-button"><Search onClick={handleSearch} /></h4>
+                <h4 title="Search" className="AddVideo-deck-button">
+                    <Search onClick={handleSearch} />
+                </h4>
             </div>
         </div>
     )

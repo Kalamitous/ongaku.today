@@ -18,6 +18,20 @@
     line-height: 2em;
 }
 
+.horizontal-divider {
+    width: 100%;
+    padding-top: 1px;
+    background-color: rgba(var(--foreground-color), 0.15);
+}
+
+.vertical-divider {
+    position: relative;
+    top: 20%;
+    height: 60%;
+    padding-left: 1px;
+    background-color: rgba(var(--foreground-color), 0.15);
+}
+
 @media only screen and (max-width: 1366px) {
     .App {
         width: calc(100% - 96px - 79px);

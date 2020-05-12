@@ -31,16 +31,16 @@ const LeftPane = props => {
         <div className="LeftPane">
             <div className="LeftPane-menu">
                 <div className="LeftPane-menu-button" onClick={libraryClick}>
-                    <h3><Home /></h3>
+                    <h3 title="Library"><Home /></h3>
                 </div>
                 <div className="LeftPane-menu-button" onClick={searchClick}>
-                    <h3><Search /></h3>
+                    <h3 title="Search"><Search /></h3>
                 </div>
                 <div className="LeftPane-menu-button" onClick={themeClick}>
-                    <h3><BrightnessMedium /></h3>
+                    <h3 title="Toggle theme"><BrightnessMedium /></h3>
                 </div>
                 <div className="LeftPane-menu-button" onClick={signOut}>
-                    <h3 className="sign-out"><ExitToApp /></h3>
+                    <h3 title="Sign out" className="sign-out"><ExitToApp /></h3>
                 </div>
             </div>
             <div className="LeftPane-container">

@@ -113,10 +113,12 @@ const Header = props => {
                 <div className="Header-tree-inner">
                     {Breadcrumbs}
                 </div> 
-            </div> 
+            </div>
+            <div className="vertical-divider" />
             <div className="Header-buttonContainer">
                 <div className="Header-buttonContainer-button" onClick={handleQueue}>
                     <h3><PlaylistPlay /></h3>
+                    <h4>Queue</h4>
                 </div>
                 {library.curId !== '0' ?
                     <div className="Header-buttonContainer-button" onClick={handleMore}>

@@ -34,14 +34,14 @@ const VolumeControl = props => {
     
     return (
         <div className="VolumeControl">
-            <h5>
-                {playerObject && Number(volume) === 0 ? // convert to Number just to not piss off linter lol
-                    <VolumeOff onClick={unmute} /> :
-                    playerObject && volume < 50 ?
-                        <VolumeDown style={{ position: "relative", left: "-2px" }} onClick={mute} /> :
-                        <VolumeUp onClick={mute} />
-                }
-            </h5>
+            {playerObject && Number(volume) === 0 ? // convert to Number just to not piss off linter lol
+                <h5 title="Unmute"><VolumeOff onClick={unmute} /></h5> :
+                playerObject && volume < 50 ?
+                    <h5 title="Mute">
+                        <VolumeDown style={{ position: 'relative', left: '-2px' }} onClick={mute} /> 
+                    </h5> :
+                    <h5 title="Mute"><VolumeUp onClick={mute} /></h5>
+            }
             <div className="VolumeControl-bar">
                 <input
                     type="range"

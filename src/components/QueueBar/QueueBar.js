@@ -67,9 +67,9 @@ const QueueBar = props => {
                 {queue.ids.length ? <h5>Queue ({queue.curIndex + 1} / {queue.ids.length})</h5> : <h5>Queue</h5>}
                 <div className="QueueBar-header-right">
                     <div className="QueueBar-header-buttons">
-                        <h5><Repeat onClick={toggleLoopPlaylist} ref={loopRef} /></h5>
-                        <h5><Shuffle onClick={shuffleQueue} /></h5>
-                        <h5><Delete onClick={clearQueue} /></h5>
+                        <h5 title="Shuffle play"><Shuffle onClick={shuffleQueue} /></h5>
+                        <h5 title="Loop queue"><Repeat onClick={toggleLoopPlaylist} ref={loopRef} /></h5>
+                        <h5 title="Clear queue"><Delete onClick={clearQueue} /></h5>
                     </div>
                 </div>
             </div>

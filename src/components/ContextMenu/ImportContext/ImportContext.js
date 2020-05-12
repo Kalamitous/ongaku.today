@@ -95,7 +95,7 @@ const ImportContext = props => {
                 <p><Cloud /></p>
                 <p>YouTube Playlists</p>
             </div>
-            <div className="ContextMenu-separator" />
+            <div className="divider" />
             <div className="ContextMenu-marginHackContainer">
                 <div className="ContextMenu-body">
                     {playlistItems}

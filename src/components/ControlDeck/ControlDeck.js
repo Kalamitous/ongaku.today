@@ -89,15 +89,13 @@ const ControlDeck = props => {
                     <VolumeControl playerObject={player.object} />
                 </div>
                 <div className="ControlDeck-footer-center">
-                    <h5><SkipPrevious onClick={() => playVideoFromId(getPrevVideo(player.loopPlaylist, queue))} /></h5>
-                    <h5>
-                        {player.state !== 1 ? <PlayArrow onClick={playVideo} /> : <Pause onClick={pauseVideo} />}
-                    </h5>
-                    <h5><SkipNext onClick={() => playVideoFromId(getNextVideo(player.loopPlaylist, queue))} /></h5>
+                    <h5 title="Previous"><SkipPrevious onClick={() => playVideoFromId(getPrevVideo(player.loopPlaylist, queue))} /></h5>
+                    {player.state !== 1 ? <h5 title="Play"><PlayArrow onClick={playVideo} /></h5> : <h5 title="Pause"><Pause onClick={pauseVideo} /></h5>}
+                    <h5 title="Next"><SkipNext onClick={() => playVideoFromId(getNextVideo(player.loopPlaylist, queue))} /></h5>
                 </div>
                 <div className="ControlDeck-footer-right">
-                    <h5><Repeat onClick={toggleLoopVideo} ref={ref} /></h5>
-                    <h5><Fullscreen onClick={handleFullscreen} /></h5>
+                    <h5 title="Loop video"><Repeat onClick={toggleLoopVideo} ref={ref} /></h5>
+                    <h5 title="Full screen"><Fullscreen onClick={handleFullscreen} /></h5>
                 </div>
             </div>
         </div>

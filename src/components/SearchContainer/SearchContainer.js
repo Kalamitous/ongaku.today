@@ -39,7 +39,9 @@ const SearchContainer = props => {
                         onChange={handleInputChange} 
                         onKeyDown={handleEnter}
                     />
-                    <h4><Search className="SearchContainer-search-bar-button" onClick={handleSearch} /></h4>
+                    <h4 title="Search">
+                        <Search className="SearchContainer-search-bar-button" onClick={handleSearch} />
+                    </h4>
                 </div>
             </div>
             <div className="SearchContainer-results">

@@ -60,22 +60,20 @@ const ActionButtons = props => {
 
     return (
         <div className="ActionButtons"> 
-            <h5>
-                {props.handleToggle ? 
-                    props.handleToggle(id) ? <Add onClick={handleAdd} /> : <Remove onClick={handleRemove} /> :
-                    props.handleAdd ? <Add onClick={handleAdd} /> : null
-                }
-            </h5>
-            <h5><PlayArrow onClick={() => playVideo(id)} /></h5>
-            <h5>{props.handleQueue ? <PlaylistAdd onClick={handleQueue} /> : null}</h5>
-            <h5>
-                {props.handleMore ? 
-                    <MoreHoriz onClick={handleMore} /> :
-                    !props.handleToggle && props.handleRemove ?
-                        <Remove onClick={handleRemove} /> :
-                        null
-                }
-            </h5>
+            {props.handleToggle ? 
+                props.handleToggle(id) ?
+                    <h5 title="Add to playlist"><Add onClick={handleAdd} /></h5> :
+                    <h5 title="Remove from playlist"><Remove onClick={handleRemove} /></h5> :
+                props.handleAdd ? <h5 title="Add to playlist"><Add onClick={handleAdd} /></h5> : null
+            }
+            <h5 title="Play"><PlayArrow onClick={() => playVideo(id)} /></h5>
+            <h5 title="Add to queue">{props.handleQueue ? <PlaylistAdd onClick={handleQueue} /> : null}</h5>
+            {props.handleMore ? 
+                <h5><MoreHoriz onClick={handleMore} /></h5> :
+                !props.handleToggle && props.handleRemove ?
+                    <h5 title="Remove from queue"><Remove onClick={handleRemove} /></h5> :
+                    null
+            }
             <h4 className="ActionButtons-dragHandle">{props.draggable ? <DragHandle /> : null}</h4>
         </div>
     )

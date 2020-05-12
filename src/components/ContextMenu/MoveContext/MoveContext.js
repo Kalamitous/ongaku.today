@@ -97,14 +97,14 @@ const MoveContext = props => {
                 <p>{curId !== '0' ? <ChevronLeft /> : <Home />}</p>
                 <p>{getName(library, curId)}</p>
             </div>
-            <div className="ContextMenu-separator"></div>
+            <div className="horizontal-divider"></div>
             <div className="ContextMenu-marginHackContainer">
                 <div className="ContextMenu-body">
                     {libraryItems}
                 </div>
                 {libraryItems.length > 5 ? <div className="ContextMenu-marginHackContainer-marginHack" /> : null}
             </div>
-            {libraryItems.length > 0 ? <div className="ContextMenu-separator"></div> : null}
+            {libraryItems.length > 0 ? <div className="divider"></div> : null}
             <div className="ContextMenu-item" onClick={() => createItem('folder', curId)}>
                 <p><CreateNewFolder /></p>
                 <p>Create folder</p>
@@ -115,7 +115,7 @@ const MoveContext = props => {
                     <p>Create playlist</p>
                 </div> :
                 <div>
-                    <div className="ContextMenu-separator"></div>
+                    <div className="horizontal-divider"></div>
                     <div
                         className={
                             get(library, curId).folders.includes(id) || get(library, curId).playlists.includes(id) ?

@@ -8,7 +8,7 @@ const RightPane = () => (
     <div className="RightPane">
         <VideoContainer />
         <ControlDeck />
-        <div className="RightPane-divider" />
+        <div className="horizontal-divider" />
         <QueueBar />
     </div>
 )

@@ -48,6 +48,7 @@ const LibraryContainer = props => {
     return (
         <div className="LibraryContainer">
             <Header />
+            <div className="horizontal-divider" />
             {isFolder(library, curId) ?
                 <div className="LibraryContainer-subHeader">
                     <div className="LibraryContainer-subHeader-button" onClick={() => {createItem('folder', curId)}}>
@@ -60,12 +61,14 @@ const LibraryContainer = props => {
                     </div>
                     <div className="LibraryContainer-subHeader-blockHack"></div>
                 </div> :
-                <AddVideo
-                    searchResultIds={searchResultIds}
-                    setSearchResultIds={setSearchResultIds}
-                    handleAdd={(_, id) => addPlaylistVideo(curId, id)}
-                    handleMatchYouTubeURL={id => addPlaylistVideo(curId, id)}
-                />
+                <div className="LibraryContainer-subHeader">
+                    <AddVideo
+                        searchResultIds={searchResultIds}
+                        setSearchResultIds={setSearchResultIds}
+                        handleAdd={(_, id) => addPlaylistVideo(curId, id)}
+                        handleMatchYouTubeURL={id => addPlaylistVideo(curId, id)}
+                    />
+                </div>
             }
             {isFolder(library, curId) ? 
                 <Grid loaded={loaded} /> : 

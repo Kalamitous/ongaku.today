@@ -8,6 +8,7 @@
 .LibraryContainer-subHeader {
     display: flex;
     position: relative;
+    padding-top: 16px;
 }
 
 .LibraryContainer-subHeader-button {
