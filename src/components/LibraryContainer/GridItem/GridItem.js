@@ -29,7 +29,7 @@ const GridItem = props => {
             detail: { id: id, handleEdit: handleEdit }
         })
         window.dispatchEvent(event)
-    }, [])
+    }, [id])
 
     const removeActiveClass = () => {
         document.querySelector(`.${type}-buttonContainer-buttons.active`).classList.remove('active')
