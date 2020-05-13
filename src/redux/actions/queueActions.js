@@ -64,15 +64,14 @@ export const skipToVideo = id => ({
     payload: { id }
 })
 
+// shuffle videos in the queue located after the current video
 export const shuffleQueue = () => {
     return (dispatch, getState) => {
         const queue = getState().queue
-        if (queue.length === 0) return
-        const curId = queue.ids[queue.curIndex]
-        queue.ids.sort(() => Math.random() - 0.5)
-        if (getState().player.state !== 5) {
-            dispatch(setQueueIndex(queue.ids.indexOf(curId)))
-        } else {
+        const toShuffle = queue.ids.splice(queue.curIndex + 1, queue.ids.length - queue.curIndex)
+        toShuffle.sort(() => Math.random() - 0.5)
+        queue.ids = queue.ids.concat(toShuffle)
+        if (getState().player.state === 5) {
             dispatch(cueVideo(queue.ids[queue.curIndex]))
         }
         let ids = queue.ids
