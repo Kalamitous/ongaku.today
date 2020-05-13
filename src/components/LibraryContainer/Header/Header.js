@@ -3,11 +3,12 @@ import { connect } from 'react-redux'
 import { openContext } from '../../../redux/actions/contextActions'
 import { loadItem, removeItem, setItemParent, setItemView } from '../../../redux/actions/libraryActions'
 import { addToQueue } from '../../../redux/actions/queueActions'
-import { get, getName, getAllVideos, isFolder } from '../../../util/library'
+import { get, getName, getAllVideos } from '../../../util/library'
 import ImportContext from '../../ContextMenu/ImportContext/ImportContext'
 import MoreContext from '../../ContextMenu/MoreContext'
 import MoveContext from '../../ContextMenu/MoveContext/MoveContext'
 import Breadcrumb from '../Breadcrumb/Breadcrumb'
+import CloudDownload from '@material-ui/icons/CloudDownload'
 import MoreHoriz from '@material-ui/icons/MoreHoriz'
 import PlaylistPlay from '@material-ui/icons/PlaylistPlay'
 import './Header.css'
@@ -62,12 +63,7 @@ const Header = props => {
             event, 
             <MoreContext
                 handleEdit={handleEdit}
-                handleMove={handleMove({clientX: event.clientX, clientY: event.clientY})}
-                handleImport={
-                    !isFolder(library, library.curId) ? 
-                        handleImport({clientX: event.clientX, clientY: event.clientY}) :
-                        null
-                }
+                handleMove={handleMove({ clientX: event.clientX, clientY: event.clientY })}
                 handleDelete={handleDelete}
             />
         )
@@ -93,9 +89,7 @@ const Header = props => {
         curBreadcrumb.innerText = ''
         curBreadcrumb.focus()
     }
-    const handleImport = event => (() =>
-        openContext(event, <ImportContext />)
-    )
+    const handleImport = event => openContext(event, <ImportContext />)
     const handleDelete = () => {
         setItemView(get(library, library.curId).parent)
         removeItem(library.curId)
@@ -119,6 +113,10 @@ const Header = props => {
                 <div className="Header-buttonContainer-button" onClick={handleQueue}>
                     <h3><PlaylistPlay /></h3>
                     <h4>Queue</h4>
+                </div>
+                <div className="Header-buttonContainer-button" onClick={handleImport}>
+                    <h4><CloudDownload /></h4>
+                    <h4>&nbsp;Import</h4>
                 </div>
                 {library.curId !== '0' ?
                     <div className="Header-buttonContainer-button" onClick={handleMore}>

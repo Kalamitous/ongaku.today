@@ -1,8 +1,9 @@
 import React, { useState, useLayoutEffect } from 'react'
 import { connect } from 'react-redux'
-import { retrievePlaylists } from '../../../redux/actions/firebaseActions'
 import { closeContext } from '../../../redux/actions/contextActions'
-import { addPlaylistBatch } from '../../../redux/actions/libraryActions'
+import { retrievePlaylists } from '../../../redux/actions/firebaseActions'
+import { createItem, setItemName, addPlaylistBatch } from '../../../redux/actions/libraryActions'
+import { get, isFolder } from '../../../util/library'
 import Cloud from '@material-ui/icons/Cloud'
 import CloudDownload from '@material-ui/icons/CloudDownload'
 import VideoLibrary from '@material-ui/icons/VideoLibrary'
@@ -22,34 +23,31 @@ const ImportContextItem = props => {
 }
 
 const ImportContext = props => {
-    const retrievedPlaylists = props.retrievedPlaylists
-    const curId = props.curId
-    const retrievePlaylists = props.retrievePlaylists
     const closeContext = props.closeContext
+    const retrievedPlaylists = props.retrievedPlaylists
+    const retrievePlaylists = props.retrievePlaylists
+    const createItem = props.createItem
+    const setItemName = props.setItemName
     const addPlaylistBatch = props.addPlaylistBatch
+    const library = props.library
+    const curId = library.curId
     
-    const [retrieved, setRetrieved] = useState(false)
-    const [playlistItems, setPlaylistItems] = useState([
-        <div className="ContextMenu-message" key="loading">
-            <p>Loading...</p>
-        </div>
-    ])
+    const [retrieved, setRetrieved] = useState(retrievedPlaylists != null)
+    const [playlistItems, setPlaylistItems] = useState([])
+    const [message, setMessage] = useState('Loading...')
     
     useLayoutEffect(() => {
-        if (!retrieved) {
-            retrievePlaylists(() => setRetrieved(true))
-            return
-        }
         if (!retrievedPlaylists) {
-            setPlaylistItems([
-                <div className="ContextMenu-message" key="loading">
-                    <p>None found.</p>
-                </div>
-            ])
+            if (retrieved) {
+                setMessage('None found.')
+            } else {
+                retrievePlaylists(() => setRetrieved(true))
+            }
             return
         }
+        setMessage(null)
         const temp = []
-        retrievedPlaylists.forEach((item) => {
+        retrievedPlaylists.forEach(item => {
             const recursiveRetrieval = (arr, nextPageToken, callback) => {
                 if (typeof(nextPageToken) === 'undefined') {
                     callback()
@@ -72,9 +70,18 @@ const ImportContext = props => {
             const handleImport = () => {
                 let nextPageToken = ''
                 const videoIds = []
+                setMessage('Importing...')
                 recursiveRetrieval(videoIds, nextPageToken, () => {
+                    // create a playlist if we are importing into a folder
+                    let playlistId = curId
+                    if (isFolder(library, curId)) {
+                        createItem('playlist', curId)
+                        const playlists = get(library, curId).playlists
+                        playlistId = playlists[playlists.length - 1]
+                        setItemName(playlistId, item.snippet.title)
+                    }
+                    addPlaylistBatch(playlistId, videoIds)
                     closeContext()
-                    addPlaylistBatch(curId, videoIds)
                 })
             }
             temp.push(
@@ -87,7 +94,17 @@ const ImportContext = props => {
             )
         })
         setPlaylistItems(temp)
-    }, [retrieved, retrievedPlaylists, closeContext, retrievePlaylists, addPlaylistBatch, curId])
+    }, [
+        addPlaylistBatch,
+        closeContext,
+        createItem,
+        curId,
+        library,
+        retrievePlaylists,
+        retrieved,
+        retrievedPlaylists,
+        setItemName
+    ])
 
     return (
         <div className="ImportContext">
@@ -95,10 +112,15 @@ const ImportContext = props => {
                 <p><Cloud /></p>
                 <p>YouTube Playlists</p>
             </div>
-            <div className="divider" />
+            <div className="horizontal-divider" />
             <div className="ContextMenu-marginHackContainer">
                 <div className="ContextMenu-body">
-                    {playlistItems}
+                    {message ?
+                        <div className="ContextMenu-message">
+                            <p>{message}</p>
+                        </div> :
+                        playlistItems
+                    }
                 </div>
                 {playlistItems.length > 5 ? <div className="ContextMenu-marginHackContainer-marginHack" /> : null}
             </div>
@@ -109,11 +131,13 @@ const ImportContext = props => {
 export default connect(
     state => ({
         retrievedPlaylists: state.firebase.playlists,
-        curId: state.library.curId
+        library: state.library
     }),
     dispatch => ({
         closeContext: () => dispatch(closeContext()),
-        retrievePlaylists: (callback) => dispatch(retrievePlaylists(callback)),
+        retrievePlaylists: callback => dispatch(retrievePlaylists(callback)),
+        createItem: (type, parent) => dispatch(createItem(type, parent)),
+        setItemName: (id, name) => dispatch(setItemName(id, name)),
         addPlaylistBatch: (playlistId, batch) => dispatch(addPlaylistBatch(playlistId, batch))
     })
 )(ImportContext)

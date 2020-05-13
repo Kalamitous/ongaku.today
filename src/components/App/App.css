@@ -1,9 +1,9 @@
 .App {
     display: flex;
-    width: calc(100% - 144px - 84px);
+    width: calc(100% - 144px - 83px);
     height: calc(100vh - 144px);
     padding: 72px;
-    padding-right: calc(72px + 84px);
+    padding-right: calc(72px + 83px);
     /* allows scrollbar on firefox to change color */
     background-color: rgb(var(--background-color));
 }
@@ -34,18 +34,18 @@
 
 @media only screen and (max-width: 1366px) {
     .App {
-        width: calc(100% - 96px - 79px);
+        width: calc(100% - 96px - 78px);
         height: calc(100vh - 96px);
         padding: 48px;
-        padding-right: calc(48px + 79px);
+        padding-right: calc(48px + 78px);
     }
 }
 
 @media only screen and (max-width: 1024px) {
     .App {
-        width: calc(100% - 48px - 79px);
+        width: calc(100% - 48px - 78px);
         height: calc(100vh - 48px);
         padding: 24px;
-        padding-right: calc(24px + 79px);
+        padding-right: calc(24px + 78px);
     }
 }
