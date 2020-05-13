@@ -17,14 +17,14 @@ const remove = (state, payload) => {
 const skip = (state, payload) => {
     const nextIndex = state.ids.indexOf(payload.id)
     if (nextIndex === -1) {
-        state.ids[state.curIndex] = payload.id
+        state.ids.splice(state.curIndex + 1, 0, payload.id)
+        state.curIndex++;
     } else {
         state.curIndex = nextIndex
     }
     localStorage.setItem('index', state.curIndex.toString())
     return { ...state, state }
 }
-
 
 const initialState = {
     ids: JSON.parse(localStorage.getItem('queue')) || [],
