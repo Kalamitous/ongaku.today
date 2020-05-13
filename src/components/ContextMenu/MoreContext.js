@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { closeContext } from '../../redux/actions/contextActions'
-import CloudDownload from '@material-ui/icons/CloudDownload'
 import Delete from '@material-ui/icons/Delete'
 import Edit from '@material-ui/icons/Edit'
 import ExitToApp from '@material-ui/icons/ExitToApp'
@@ -9,7 +8,6 @@ import ExitToApp from '@material-ui/icons/ExitToApp'
 const MoreContext = props => {
     const closeContext = props.closeContext
     const handleMove = props.handleMove
-    const handleImport = props.handleImport
     const deleteText = props.deleteText || 'Delete'
 
     const handleEdit = () => {
@@ -23,13 +21,6 @@ const MoreContext = props => {
 
     return (
         <div className="MoreContext">
-            {props.handleImport ?
-                <div className="ContextMenu-item" onClick={handleImport}>
-                    <p><CloudDownload /></p>
-                    <p>Import</p>
-                </div> :
-                null
-            }
             {props.handleEdit ? 
                 <div className="ContextMenu-item" onClick={handleEdit}>
                     <p><Edit /></p>
