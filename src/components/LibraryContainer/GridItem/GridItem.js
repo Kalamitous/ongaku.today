@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { openContext } from '../../../redux/actions/contextActions'
 import { removeItem, setItemName, setItemParent, setItemView } from '../../../redux/actions/libraryActions'
@@ -22,6 +22,14 @@ const GridItem = props => {
     const type = props.type
 
     const ref = useRef()
+
+    // see LibraryContainer for why we do this
+    useEffect(() => {
+        const event = new CustomEvent('onItemCreate', {
+            detail: { id: id, handleEdit: handleEdit }
+        })
+        window.dispatchEvent(event)
+    }, [])
 
     const removeActiveClass = () => {
         document.querySelector(`.${type}-buttonContainer-buttons.active`).classList.remove('active')
@@ -52,6 +60,7 @@ const GridItem = props => {
     const handleEdit = () => {
         // set to zero-width character to align caret on firefox
         ref.current.innerText = '\u200b'
+        ref.current.classList.toggle('placeholder', true)
         ref.current.focus()
     }
     const handleBlur = event => {
@@ -61,17 +70,20 @@ const GridItem = props => {
         } else {
             event.target.innerText = name
         }
+        event.target.classList.toggle('placeholder', false)
         event.target.blur() // blur when window loses focus as well
     }
     const handleChange = event => {
         const maxLength = 24
-        if (event.target.innerText.length >= maxLength) {
-            event.target.innerText = event.target.innerText.substring(0, maxLength + 1)
+        const text = event.target.innerText
+        if (text !== '\u200b') event.target.classList.toggle('placeholder', false)
+        if (text.length >= maxLength) {
+            event.target.innerText = text.substring(0, maxLength + 1)
             event.target.blur()
         }
-        if (event.keyCode === 13) event.target.blur() // blur on enter key
     }
-
+    const handleEnter = event => {if (event.keyCode === 13) event.target.blur()}
+    
     return (
         <div className={type}>
             <div className={`${type}-buttonContainer`} onClick={() => setItemView(id)}>
@@ -83,10 +95,13 @@ const GridItem = props => {
             <div className={`${type}-text`}>
                 <h5 
                     ref={ref}
+                    id={`gi-${id}`}
                     contentEditable="true"
+                    placeholder="Enter name"
                     spellCheck="false"
                     onBlur={handleBlur}
-                    onKeyDown={handleChange}
+                    onInput={handleChange}
+                    onKeyDown={handleEnter}
                     suppressContentEditableWarning={true}
                 >{name}</h5>
             </div>

@@ -57,4 +57,11 @@ export const getTypeFromID = (state, id) => {
     return 'playlists'
 }
 
+// used to get the id of an item right after its creation
+export const getLatestChildOfType = (type, state, id) => {
+    type += 's'
+    const item = get(state, id)
+    return item[type][item[type].length - 1]
+}
+
 export const isFolder = (state, id) => Boolean(get(state, id) && get(state, id).folders)

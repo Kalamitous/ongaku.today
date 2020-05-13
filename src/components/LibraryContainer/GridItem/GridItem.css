@@ -32,6 +32,12 @@
     text-align: center;
 }
 
+.FolderItem-text .placeholder:after{
+    content: attr(placeholder);
+    color: rgb(var(--foreground-color), 0.5);
+}
+
+
 .FolderItem-buttonContainer {
     display: flex;
     flex-direction: column;
@@ -89,6 +95,11 @@
     align-self: center;
     width: 100%;
     text-align: center;
+}
+
+.PlaylistItem-text .placeholder:after{
+    content: attr(placeholder);
+    color: rgb(0, 0, 0, 0.5);
 }
 
 .PlaylistItem-buttonContainer {

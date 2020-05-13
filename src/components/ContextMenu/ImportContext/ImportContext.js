@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { closeContext } from '../../../redux/actions/contextActions'
 import { retrievePlaylists } from '../../../redux/actions/firebaseActions'
 import { createItem, setItemName, addPlaylistBatch } from '../../../redux/actions/libraryActions'
-import { get, isFolder } from '../../../util/library'
+import { getLatestChildOfType, isFolder } from '../../../util/library'
 import Cloud from '@material-ui/icons/Cloud'
 import CloudDownload from '@material-ui/icons/CloudDownload'
 import VideoLibrary from '@material-ui/icons/VideoLibrary'
@@ -76,8 +76,7 @@ const ImportContext = props => {
                     let playlistId = curId
                     if (isFolder(library, curId)) {
                         createItem('playlist', curId)
-                        const playlists = get(library, curId).playlists
-                        playlistId = playlists[playlists.length - 1]
+                        playlistId = getLatestChildOfType('playlist', library, curId)
                         setItemName(playlistId, item.snippet.title)
                     }
                     addPlaylistBatch(playlistId, videoIds)

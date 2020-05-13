@@ -7,7 +7,7 @@ import {
     deletePlaylistVideo,
     movePlaylistVideo
 } from '../../redux/actions/libraryActions'
-import { get, isFolder } from '../../util/library'
+import { get, getLatestChildOfType, isFolder } from '../../util/library'
 import AddVideo from './AddVideo/AddVideo'
 import Header from './Header/Header'
 import Grid from './Grid/Grid'
@@ -17,7 +17,6 @@ import './LibraryContainer.css'
 
 const LibraryContainer = props => {
     const library = props.library
-    const createItem = props.createItem
     const loadItem = props.loadItem
     const addPlaylistVideo = props.addPlaylistVideo
     const deletePlaylistVideo = props.deletePlaylistVideo
@@ -25,6 +24,7 @@ const LibraryContainer = props => {
 
     const [loaded, setLoaded] = useState(false)
     const [searchResultIds, setSearchResultIds] = useState([])
+    const [createdItem, setCreatedItem] = useState()
 
     const curId = library.curId
     const curPlaylist = get(library, curId)
@@ -36,15 +36,30 @@ const LibraryContainer = props => {
         loadItem(curId).then(() => setLoaded(true))
     }, [curId, loadItem])
 
+    // prompt user to enter name for the created item upon GridItem load
+    useLayoutEffect(() => {
+        const focus = event => {
+            const id = event.detail.id
+            const handleEdit = event.detail.handleEdit
+            if (id !== createdItem) return
+            handleEdit()
+        }
+        window.addEventListener('onItemCreate', focus)
+        return () => window.removeEventListener('onItemCreate', focus)
+    }, [createdItem])
+
     const handleAdd = id => addPlaylistVideo(curId, id)
     const handleToggle = id => !curPlaylist.videos.includes(id)
     const handleDelete = id => deletePlaylistVideo(curId, id)
 
+    const createItem = (type, parent) => {
+        props.createItem(type, parent)
+        setCreatedItem(getLatestChildOfType(type, library, parent))
+    }
     const onSortEnd = (oldIndex, newIndex) => {
         const videoId = get(library, curId).videos[oldIndex]
         movePlaylistVideo(curId, videoId, newIndex)
     }
-    
     return (
         <div className="LibraryContainer">
             <Header />
