@@ -104,7 +104,7 @@ const MoveContext = props => {
                 </div>
                 {libraryItems.length > 5 ? <div className="ContextMenu-marginHackContainer-marginHack" /> : null}
             </div>
-            {libraryItems.length > 0 ? <div className="divider"></div> : null}
+            {libraryItems.length > 0 ? <div className="horizontal-divider"></div> : null}
             <div className="ContextMenu-item" onClick={() => createItem('folder', curId)}>
                 <p><CreateNewFolder /></p>
                 <p>Create folder</p>
@@ -114,19 +114,16 @@ const MoveContext = props => {
                     <p><LibraryAdd /></p>
                     <p>Create playlist</p>
                 </div> :
-                <div>
-                    <div className="horizontal-divider"></div>
-                    <div
-                        className={
-                            get(library, curId).folders.includes(id) || get(library, curId).playlists.includes(id) ?
-                                'ContextMenu-item disabled' :
-                                'ContextMenu-item'
-                        }
-                        onClick={() => contextAction(curId)}
-                    >
-                        <p><ExitToApp /></p>
-                        <p>Move here</p>
-                    </div>
+                <div
+                    className={
+                        get(library, curId).folders.includes(id) || get(library, curId).playlists.includes(id) ?
+                            'ContextMenu-item disabled' :
+                            'ContextMenu-item'
+                    }
+                    onClick={() => contextAction(curId)}
+                >
+                    <p><ExitToApp /></p>
+                    <p>Move here</p>
                 </div>
             }
         </div>
