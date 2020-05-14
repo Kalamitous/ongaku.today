@@ -38,11 +38,13 @@ const LibraryContainer = props => {
 
     // prompt user to enter name for the created item upon GridItem load
     useLayoutEffect(() => {
+        if (!createdItem) return
         const focus = event => {
             const id = event.detail.id
             const handleEdit = event.detail.handleEdit
             if (id !== createdItem) return
             handleEdit()
+            setCreatedItem(null)
         }
         window.addEventListener('onItemCreate', focus)
         return () => window.removeEventListener('onItemCreate', focus)
