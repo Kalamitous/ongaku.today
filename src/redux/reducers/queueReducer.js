@@ -17,7 +17,7 @@ const remove = (state, payload) => {
 const skip = (state, payload) => {
     const nextIndex = state.ids.indexOf(payload.id)
     if (nextIndex === -1) {
-        state.ids.splice(state.curIndex, 0, payload.id)
+        state.ids.splice(state.curIndex + 1, 0, payload.id)
         if (state.ids.length > 1) {
             state.curIndex++
         }
