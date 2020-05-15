@@ -57,12 +57,12 @@ const LandingView = props => {
                     <div className="horizontal-divider" />
                     <br />
                     <h4>
-                        ongaku.today makes using YouTube as a music streaming platform easier.
+                        <b>ongaku.today</b> makes using YouTube as a music streaming platform easier.
                         With YouTube, videos can only be organized into playlists.
-                        ongaku.today takes this one step further and lets you to organize playlists into folders.
+                        <b> ongaku.today</b> takes this one step further and lets you to organize playlists into folders.
                         This nested structure of folders and playlists not only helps you keep track of videos better,
                         but also plays well with our queueing system.
-                        ongaku.today allows you to mix and match individual videos, playlists, or folders to be added to the queue.
+                        <b> ongaku.today</b> allows you to mix and match individual videos, playlists, or folders to be added to the queue.
                         You will always have full control over what is playing.
                     </h4>
                 </div>
@@ -74,9 +74,9 @@ const LandingView = props => {
                     <div className="horizontal-divider" />
                     <br />
                     <h4>
-                        For convenience, ongaku.today has integrated YouTube search and playlist importing functionality.
+                        For convenience, <b>ongaku.today</b> has integrated YouTube search and playlist importing functionality.
                         Night mode can be toggled for your preferred viewing experience.
-                        ongaku.today is still early in development with many new features being planned.
+                        <b> ongaku.today</b> is still early in development with many new features being planned.
                     </h4>
                 </div>
                 <div className="LandingView-privacy">
@@ -86,11 +86,7 @@ const LandingView = props => {
             null
     )
 }
-/*
-<div className="LandingView-privacy">
-                        <Link to="/privacy"><p>Privacy Policy</p></Link>
-                    </div>
-                    */
+
 export default connect(
     null,
     dispatch => ({

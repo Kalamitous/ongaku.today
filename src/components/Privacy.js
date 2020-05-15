@@ -6,6 +6,7 @@ const Privacy = () => (
     <div className="Page">
         <h2>Privacy Policy</h2>
         <br />
+        <div className="horizontal-divider" />
         <br />
         <h5>
             <b>ongaku.today</b> will be able to see your name and email upon sign-in.
