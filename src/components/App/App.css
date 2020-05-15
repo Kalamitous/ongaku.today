@@ -9,13 +9,21 @@
 }
 
 .Page {
-    padding-left: 20%;
-    padding-right: 40%;
+    display: flex;
+    flex-direction: column;
+    padding: 64px 20% 64px 20%;
     text-align: justify;
+    overflow: auto;
 }
 
-.Page h5 {
+.Page h4, .Page h5 {
     line-height: 2em;
+}
+
+.Page img {
+    width: 100%;
+    height: auto;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
 .horizontal-divider {

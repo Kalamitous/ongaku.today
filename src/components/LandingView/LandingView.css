@@ -3,32 +3,57 @@
     position: relative;
 }
 
-.LandingView-container {
+.LandingView-signin {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     justify-content: center;
     position: relative;
-    padding-bottom: 20%;
+    height: calc(100vh - 64px);
 }
 
-.LandingView-container-title, .LandingView-container-caption {
+.LandingView-signin-title {
+    padding-top: 10%;
+}
+
+.LandingView-signin-title, .LandingView-signin-caption {
     padding-bottom: 12px;
 }
 
-.LandingView-container-title span {
+.LandingView-signin-title span {
     color: rgb(var(--highlight-color));
 }
 
-.LandingView-privacy {
-    position: absolute;
-    bottom: 0;
+.LandingView-scroll {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    align-items: center;
+}
+
+.LandingView-scroll h4, .LandingView-scroll svg.MuiSvgIcon-root {
+    color: rgba(var(--foreground-color), 0.5);
+    cursor: default;
+}
+
+.LandingView-transition {
+    padding-top: 64px;
+}
+
+.LandingView-info {
+    padding-bottom: 64px;
+}
+
+.LandingView-info-image {
+    padding: 64px;
 }
 
 .LandingView-privacy p {
     color: rgba(var(--foreground-color), 0.5);
 }
 
-#LandingView-container-button {
+#LandingView-signin-button {
     height: 50px;
     padding-top: 12px;
+    padding-bottom: 20%;
 }

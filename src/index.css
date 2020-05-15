@@ -24,40 +24,34 @@ body {
     min-width: 1024px;
 	font-family: 'Roboto', sans-serif;
     font-size: 14px;
+    color: rgb(var(--foreground-color));
     background-color: rgb(var(--background-color));
-    overflow: hidden;
 }
 
 p {
     font-size: 1em;
-    color: rgb(var(--foreground-color));
 }
 
 h1, h1 .MuiSvgIcon-root {
     font-size: 8em;
-    color: rgb(var(--foreground-color));
 }
 
 h2, h2 .MuiSvgIcon-root {
     font-size: 4em;
-    color: rgb(var(--foreground-color));
 }
 
 h3, h3 .MuiSvgIcon-root {
     font-size: 2em;
-    color: rgb(var(--foreground-color));
 }
 
 h4, h4 .MuiSvgIcon-root {
     font-size: 1.5em;
     font-weight: lighter;
-    color: rgb(var(--foreground-color));
 }
 
 h5, h5 .MuiSvgIcon-root {
     font-size: 1.15em;
     font-weight: lighter;
-    color: rgb(var(--foreground-color));
 }
 
 a {

@@ -38,18 +38,21 @@ const App = props => {
 
   	return (
         <BrowserRouter>
-            <div className="App">
-                <Switch>
-                    <Route path="/privacy">
-                        <Privacy />
-                    </Route>
-                    <Route path="/">
-                        {isSignedIn === false ? <LandingView setLoaded={setLoaded} /> : null}
-                        {isSignedIn && loaded ? <LeftPane /> : null}
-                        {isSignedIn && loaded ? <RightPane /> : null}
-                    </Route>
-                </Switch>
-            </div>
+            <Switch>
+                <Route path="/privacy">
+                    <Privacy />
+                </Route>
+                <Route path="/">
+                    {isSignedIn === false ? <LandingView setLoaded={setLoaded} /> :
+                        loaded ?
+                            <div className="App">
+                                <LeftPane />
+                                <RightPane />
+                            </div> :
+                            null
+                    }
+                </Route>
+            </Switch>
         </BrowserRouter>
   	)
 }
