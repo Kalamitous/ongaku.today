@@ -55,7 +55,12 @@ h5, h5 .MuiSvgIcon-root {
 }
 
 a {
+    color: rgb(var(--highlight-color));
     text-decoration: none;
+}
+
+ul {
+    padding-left: 48px;
 }
 
 input {
