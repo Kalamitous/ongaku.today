@@ -74,7 +74,7 @@ To get **ongaku.today** running on your local machine, follow these steps. Make 
 ```sh
 git clone https://github.com/Kalamitous/ongaku.today.git
 ```
-2. Create the following '.env' file at the root of the cloned repository
+2. Create the following `.env` file at the root of the cloned repository
 ```
 REACT_APP_FIREBASE_API_KEY=
 REACT_APP_FIREBASE_AUTH_DOMAIN=
