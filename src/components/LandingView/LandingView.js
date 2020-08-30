@@ -53,7 +53,7 @@ const LandingView = props => {
                     <h2>About</h2>
                     <br />
                     <div className="horizontal-divider" />
-                    <div className="LandingView-info-image"><img src="landing-1.png" /></div>
+                    <div className="LandingView-info-image"><img src="landing-1.png" alt="Screenshot" /></div>
                     <div className="horizontal-divider" />
                     <br />
                     <h4>
@@ -70,7 +70,7 @@ const LandingView = props => {
                     <h2>Other Features</h2>
                     <br />
                     <div className="horizontal-divider" />
-                    <div className="LandingView-info-image"><img src="landing-2.png" /></div>
+                    <div className="LandingView-info-image"><img src="landing-2.png" alt="Screenshot" /></div>
                     <div className="horizontal-divider" />
                     <br />
                     <h4>

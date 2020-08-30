@@ -12,5 +12,5 @@ export const firebaseConfig = {
 export const youtubeConfig = {
     apiKey: process.env.REACT_APP_YOUTUBE_API_KEY,
     clientId: process.env.REACT_APP_YOUTUBE_CLIENT_ID,
-    scope: process.env.REACT_APP_YOUTUBE_SCOPE
+    scope: 'https://www.googleapis.com/auth/youtube.readonly'
 }
