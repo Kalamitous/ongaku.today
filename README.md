@@ -62,10 +62,9 @@ To get **ongaku.today** running on your local machine, follow these steps. Make 
 
 ### Firebase Setup
 
-1. Install [Node.js](https://nodejs.org)
-2. Create a new [Firebase](https://firebase.google.com) project
-3. Add a web app by going to your project settings
-4. Create a Cloud Firestore database in `Test mode`
+1. Create a new [Firebase](https://firebase.google.com) project
+2. Add a web app by going to your project settings
+3. Create a Cloud Firestore database in `Test mode`
 4. Enable Google sign-in by going to `Authentication > Sign-in method`
 5. Enable [YouTube Data API](https://console.developers.google.com/apis/library/youtube.googleapis.com?q=youtube&id=125bab65-cfb6-4f25-9826-4dcc309bc508)
 
