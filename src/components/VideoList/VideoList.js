@@ -20,6 +20,7 @@ const Item = SortableElement(({ id, props }) =>
 )
 
 const ItemList = SortableContainer(({ props }) => {
+    const resetScroll = props.resetScroll
     const videoIds = props.videoIds
     const draggable = props.onSortEnd !== undefined
 
@@ -53,17 +54,34 @@ const ItemList = SortableContainer(({ props }) => {
     return (
         <div className="VideoList">
             <AutoSizer>
-                {({ width, height }) => (
-                    <List
-                        className="VideoList-list"
-                        width={width}
-                        height={height}
-                        rowCount={videoIds.length}
-                        rowHeight={rowHeight}
-                        rowRenderer={rowRenderer}
-                        overscanRowCount={16}
-                    />
-                )}
+                {({ width, height }) => {
+                    if (resetScroll) {
+                        return (
+                            <List
+                                scrollTop={0}
+                                className="VideoList-list"
+                                width={width}
+                                height={height}
+                                rowCount={videoIds.length}
+                                rowHeight={rowHeight}
+                                rowRenderer={rowRenderer}
+                                overscanRowCount={16}
+                            />
+                        )
+                    } else {
+                        return (
+                            <List
+                                className="VideoList-list"
+                                width={width}
+                                height={height}
+                                rowCount={videoIds.length}
+                                rowHeight={rowHeight}
+                                rowRenderer={rowRenderer}
+                                overscanRowCount={16}
+                            />
+                        )
+                    }
+                }}
             </AutoSizer>
         </div>
     )

@@ -66,6 +66,7 @@ const VideoSearch = Component => props => {
     const handleInputChange = event => {
         if (event.target.value === '') {
             setSearchResultIds([])
+            setCurQuery()
         } else {
             setQuery(event.target.value)
         }

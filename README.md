@@ -124,6 +124,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 * [React Device Detect](https://github.com/duskload/react-device-detect)
 * [React Router](https://reactrouter.com)
 * [React Sortable HOC](https://github.com/clauderic/react-sortable-hoc)
+* [React Virtualized](https://github.com/bvaughn/react-virtualized)
 * [Redux Thunk](https://github.com/reduxjs/redux-thunk)
 
 

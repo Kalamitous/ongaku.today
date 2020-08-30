@@ -25,6 +25,7 @@ const LibraryContainer = props => {
     const [loaded, setLoaded] = useState(false)
     const [searchResultIds, setSearchResultIds] = useState([])
     const [createdItem, setCreatedItem] = useState()
+    const [resetScroll, setResetScroll] = useState(false)
 
     const curId = library.curId
     const curPlaylist = get(library, curId)
@@ -50,6 +51,17 @@ const LibraryContainer = props => {
         return () => window.removeEventListener('onItemCreate', focus)
     }, [createdItem])
 
+    // hack to scroll to the top of the video list when switching between playlist and video search views
+    // `resetScroll` is true for the duration of one render when `searchResultIds` has changed
+    useLayoutEffect(() => {
+        setResetScroll(true)
+    }, [searchResultIds])
+    useLayoutEffect(() => {
+        setResetScroll(false)
+    }, [resetScroll])
+
+    console.log(resetScroll)
+
     const handleAdd = id => addPlaylistVideo(curId, id)
     const handleToggle = id => !curPlaylist.videos.includes(id)
     const handleDelete = id => deletePlaylistVideo(curId, id)
@@ -62,6 +74,7 @@ const LibraryContainer = props => {
         const videoId = get(library, curId).videos[oldIndex]
         movePlaylistVideo(curId, videoId, newIndex)
     }
+
     return (
         <div className="LibraryContainer">
             <Header />
@@ -91,6 +104,7 @@ const LibraryContainer = props => {
                 <Grid loaded={loaded} /> : 
                 searchResultIds.length !== 0 ?
                     <VideoList
+                        resetScroll={resetScroll}
                         videoIds={searchResultIds}
                         handleAdd={handleAdd}
                         handleRemove={handleDelete}
@@ -98,6 +112,7 @@ const LibraryContainer = props => {
                         handleQueue
                     /> :
                     <VideoList
+                        resetScroll={resetScroll}
                         videoIds={curPlaylist.videos}
                         handleQueue
                         handleMore
