@@ -2,6 +2,7 @@ import React, { useState, useLayoutEffect } from 'react'
 import { connect } from 'react-redux'
 import { initAuth } from '../../redux/actions/firebaseActions'
 import { initLibrary } from '../../redux/actions/libraryActions'
+import { isMobile, isIE, isSafari } from 'react-device-detect'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import LandingView from '../LandingView/LandingView'
 import LeftPane from '../LeftPane/LeftPane'
@@ -15,6 +16,7 @@ const App = props => {
     const initLibrary = props.initLibrary
 
     const [loaded, setLoaded] = useState(false)
+    const [unsupported, setUnsupported] = useState(false)
 
     useLayoutEffect(() => {
         const theme = localStorage.getItem('theme')
@@ -22,6 +24,14 @@ const App = props => {
     }, [])
 
     useLayoutEffect(() => {
+        if (isMobile) {
+            setUnsupported('This app does not support mobile devices.')
+            return
+        } else if (isIE || isSafari) {
+            setUnsupported('This app does not support your web browser.')
+            return
+        }
+
         setLoaded(false) // reset load state on sign-out
         const script = document.createElement('script')
         script.src = 'https://apis.google.com/js/api.js'
@@ -30,6 +40,9 @@ const App = props => {
                 initAuth().then(() => {
                     if (!isSignedIn) return
                     initLibrary().then(() => setLoaded(true))
+                }, error => {
+                    setUnsupported('Please enable cookies to launch this app.')
+                    throw error
                 })
             })
         }
@@ -43,7 +56,7 @@ const App = props => {
                     <Privacy />
                 </Route>
                 <Route path="/">
-                    {isSignedIn === false ? <LandingView setLoaded={setLoaded} /> :
+                    {isSignedIn === false || unsupported ? <LandingView setLoaded={setLoaded} unsupported={unsupported} /> :
                         loaded ?
                             <div className="App">
                                 <LeftPane />

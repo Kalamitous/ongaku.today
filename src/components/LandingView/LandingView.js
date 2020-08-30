@@ -10,11 +10,12 @@ const LandingView = props => {
     const signIn = props.signIn
     const initLibrary = props.initLibrary
     const setLoaded = props.setLoaded
+    const unsupported = props.unsupported
 
     const [signedIn, setSignedIn] = useState(false)
 
     useLayoutEffect(() => {
-        if (!document.getElementById('LandingView-signin-button')) {
+        if (unsupported || !document.getElementById('LandingView-signin-button')) {
             return
         }
         const script = document.createElement('script')
@@ -42,7 +43,9 @@ const LandingView = props => {
                 <div className="LandingView-signin">
                     <h1 className="LandingView-signin-title">ongaku<span>.today</span></h1>
                     <h3 className="LandingView-signin-caption">A robust playlist manager for YouTube.</h3>
-                    <div id="LandingView-signin-button" />
+                    <div id="LandingView-signin-button">
+                        {unsupported ? <h4 className="LandingView-unsupported">{unsupported}</h4> : null}
+                    </div>
                     <div className="LandingView-scroll">
                         <h4>Scroll for more</h4>
                         <h3><ExpandMore /></h3>
@@ -76,7 +79,7 @@ const LandingView = props => {
                     <h4>
                         For convenience, <b>ongaku.today</b> has integrated YouTube search and playlist importing functionality.
                         Night mode can be toggled for your preferred viewing experience.
-                        <b> ongaku.today</b> is still early in development with many new features being planned.
+                        <b> ongaku.today</b> is still early in development with many new features planned.
                     </h4>
                 </div>
                 <div className="LandingView-privacy">

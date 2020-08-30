@@ -24,6 +24,10 @@
     color: rgb(var(--highlight-color));
 }
 
+.LandingView-unsupported {
+    color: #e74c3c;
+}
+
 .LandingView-scroll {
     display: flex;
     flex-direction: column;

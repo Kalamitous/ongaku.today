@@ -46,7 +46,7 @@ You will always have full control over what is playing.
 
 For convenience, **ongaku.today** has integrated YouTube search and playlist importing functionality.
 Night mode can be toggled for your preferred viewing experience.
-**ongaku.today** is still early in development with many new features being planned.
+**ongaku.today** is still early in development with many new features planned.
 
 ### Built With
 
@@ -88,7 +88,7 @@ REACT_APP_YOUTUBE_API_KEY=
 REACT_APP_YOUTUBE_CLIENT_ID=
 ```
 3. Fill in the top portion of the `.env` file with the configuration of your Firebase project web app from step 3 of [Firebase Setup](#firebase-setup)
-4. Fill in the bottom portion of the `.env` file with the YouTube Data API key and OAuth client ID found in your project's [Credentials page](https://console.developers.google.com/apis/credentials)
+4. Fill in the bottom portion of the `.env` file with the API key and OAuth client ID found in your project's [Credentials page](https://console.developers.google.com/apis/credentials)
 
 ### Installing & Running
 
@@ -121,6 +121,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Acknowledgements
 * [Material UI Icons](https://www.npmjs.com/package/@material-ui/icons)
+* [React Device Detect](https://github.com/duskload/react-device-detect)
 * [React Router](https://reactrouter.com)
 * [React Sortable HOC](https://github.com/clauderic/react-sortable-hoc)
 * [Redux Thunk](https://github.com/reduxjs/redux-thunk)
