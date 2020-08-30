@@ -44,7 +44,7 @@ This nested structure of folders and playlists not only helps you keep track of 
 **ongaku.today** allows you to mix and match individual videos, playlists, or folders to be added to the queue.
 You will always have full control over what is playing.
 
-For convenience, ongaku.today has integrated YouTube search and playlist importing functionality.
+For convenience, **ongaku.today** has integrated YouTube search and playlist importing functionality.
 Night mode can be toggled for your preferred viewing experience.
 **ongaku.today** is still early in development with many new features being planned.
 
