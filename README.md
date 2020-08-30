@@ -121,6 +121,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Acknowledgements
 * [Material UI Icons](https://www.npmjs.com/package/@material-ui/icons)
+* [React Router](https://reactrouter.com)
 * [React Sortable HOC](https://github.com/clauderic/react-sortable-hoc)
 * [Redux Thunk](https://github.com/reduxjs/redux-thunk)
 
