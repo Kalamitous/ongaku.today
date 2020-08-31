@@ -51,16 +51,20 @@ const LibraryContainer = props => {
         return () => window.removeEventListener('onItemCreate', focus)
     }, [createdItem])
 
-    // hack to scroll to the top of the video list when switching between playlist and video search views
+    // somewhat hacky way to scroll to the top of the video list when switching between playlist and search lists
     // `resetScroll` is true for the duration of one render when `searchResultIds` has changed
     useLayoutEffect(() => {
-        setResetScroll(true)
+        setResetScroll(0)
     }, [searchResultIds])
     useLayoutEffect(() => {
         setResetScroll(false)
     }, [resetScroll])
 
-    console.log(resetScroll)
+    const handleMatchYouTubeURL = id => {
+        addPlaylistVideo(curId, id)
+        setResetScroll(curPlaylist.videos.indexOf(id))
+        document.querySelector('.AddVideo-deck-input').value = ''
+    }
 
     const handleAdd = id => addPlaylistVideo(curId, id)
     const handleToggle = id => !curPlaylist.videos.includes(id)
@@ -96,7 +100,7 @@ const LibraryContainer = props => {
                         searchResultIds={searchResultIds}
                         setSearchResultIds={setSearchResultIds}
                         handleAdd={(_, id) => addPlaylistVideo(curId, id)}
-                        handleMatchYouTubeURL={id => addPlaylistVideo(curId, id)}
+                        handleMatchYouTubeURL={handleMatchYouTubeURL}
                     />
                 </div>
             }

@@ -55,10 +55,10 @@ const ItemList = SortableContainer(({ props }) => {
         <div className="VideoList">
             <AutoSizer>
                 {({ width, height }) => {
-                    if (resetScroll) {
+                    if (resetScroll !== false) {
                         return (
                             <List
-                                scrollTop={0}
+                                scrollToIndex={resetScroll}
                                 className="VideoList-list"
                                 width={width}
                                 height={height}
