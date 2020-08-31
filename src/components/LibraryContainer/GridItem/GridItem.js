@@ -64,7 +64,8 @@ const GridItem = props => {
         ref.current.focus()
     }
     const handleBlur = event => {
-        const text = event.target.innerText
+        // delete zero-width character so trimming can work and then add it back
+        const text = event.target.innerText.substring(0, event.target.innerText.length - 1).trim() + '\u200b'
         if (text !== '\u200b') {
             setItemName(id, text)
         } else {
