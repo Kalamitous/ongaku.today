@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react'
+import React from 'react'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 import { AutoSizer, List } from 'react-virtualized'
 import VideoItem from '../VideoItem/VideoItem'
@@ -24,24 +24,6 @@ const ItemList = SortableContainer(({ props }) => {
     const videoIds = props.videoIds
     const draggable = props.onSortEnd !== undefined
 
-    const [rowHeight, setRowHeight] = useState(0)
-
-    useLayoutEffect(() => {
-        const updateRowHeight = () => {
-            const div = document.createElement('div')
-            div.className = 'VideoItem-body-info'
-            div.innerHTML =
-                '<div className="VideoItem-body-info-title"><p>&nbsp;</p></div>' +
-                '<div className="VideoItem-body-info-author"><p>&nbsp;</p></div>'
-            document.body.append(div)
-            setRowHeight(div.offsetHeight)
-            div.remove()
-        }
-        updateRowHeight()
-        window.addEventListener('resize', updateRowHeight)
-        return () => window.removeEventListener('resize', updateRowHeight)
-    }, [])
-
     const rowRenderer = ({ index, style }) => {
         const id = videoIds[index]
         return (
@@ -63,7 +45,7 @@ const ItemList = SortableContainer(({ props }) => {
                                 width={width}
                                 height={height}
                                 rowCount={videoIds.length}
-                                rowHeight={rowHeight}
+                                rowHeight={70}
                                 rowRenderer={rowRenderer}
                                 overscanRowCount={16}
                             />
@@ -75,7 +57,7 @@ const ItemList = SortableContainer(({ props }) => {
                                 width={width}
                                 height={height}
                                 rowCount={videoIds.length}
-                                rowHeight={rowHeight}
+                                rowHeight={70}
                                 rowRenderer={rowRenderer}
                                 overscanRowCount={16}
                             />

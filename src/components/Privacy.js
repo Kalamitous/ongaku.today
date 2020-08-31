@@ -34,6 +34,9 @@ const Privacy = () => (
             In order to do so, we will request to view YouTube information associated with your Google account.
             We only attempt to access your playlist data and do not store any of this data.
             The folders and playlists you create and the videos you add on ongaku.today are stored in our cloud database (Cloud Firestore).
+            <br />
+            By using <b>ongaku.today</b>, you are also agreeing with <a href="https://www.youtube.com/t/terms">YouTube Terms of Service</a>.
+            You may revoke <b>ongaku.today</b> from accessing your data at any time by doing so from <a href="https://security.google.com/settings/security/permissions">Google security settings</a>.
         </h5>
         <br />
         <br />

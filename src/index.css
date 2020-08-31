@@ -10,6 +10,7 @@ body {
     --midground-color: 255, 255, 255;
     --background-color: 255, 255, 255;
     --highlight-color: 	156, 241, 150;
+    overflow-x: hidden;
 }
 
 body.dark-mode {
