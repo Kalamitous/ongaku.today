@@ -68,7 +68,12 @@ export const skipToVideo = id => ({
 export const shuffleQueue = () => {
     return (dispatch, getState) => {
         const queue = getState().queue
-        const toShuffle = queue.ids.splice(queue.curIndex + 1, queue.ids.length - queue.curIndex)
+        let toShuffle
+        if (getState().player.state === 5) {
+            toShuffle = queue.ids.splice(queue.curIndex, queue.ids.length - queue.curIndex)
+        } else {
+            toShuffle = queue.ids.splice(queue.curIndex + 1, queue.ids.length - queue.curIndex)
+        }
         toShuffle.sort(() => Math.random() - 0.5)
         queue.ids = queue.ids.concat(toShuffle)
         if (getState().player.state === 5) {
