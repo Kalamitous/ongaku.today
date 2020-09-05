@@ -94,13 +94,17 @@ export const validateData = () => {
                                 })
                             }
                         })
+                    }).then(() => {
+                        firestore.collection(uid).doc('metadata').set({
+                            lastValidateTime: curTime
+                        })
                     })
                 }
+            } else {
+                firestore.collection(uid).doc('metadata').set({
+                    lastValidateTime: curTime
+                })
             }
-        }).then(() => {
-            firestore.collection(uid).doc('metadata').set({
-                lastValidateTime: curTime
-            })
         })
     }
 }
