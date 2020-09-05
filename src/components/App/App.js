@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect } from 'react'
 import { connect } from 'react-redux'
-import { initAuth } from '../../redux/actions/firebaseActions'
+import { initAuth, validateData } from '../../redux/actions/firebaseActions'
 import { initLibrary } from '../../redux/actions/libraryActions'
 import { isMobile, isIE, isSafari } from 'react-device-detect'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
@@ -14,6 +14,7 @@ const App = props => {
     const isSignedIn = props.isSignedIn
     const initAuth = props.initAuth
     const initLibrary = props.initLibrary
+    const validateData = props.validateData
 
     const [loaded, setLoaded] = useState(false)
     const [unsupported, setUnsupported] = useState(false)
@@ -39,7 +40,9 @@ const App = props => {
             window.gapi.load('client', () => {
                 initAuth().then(() => {
                     if (!isSignedIn) return
-                    initLibrary().then(() => setLoaded(true))
+                    initLibrary()
+                    .then(() => validateData())
+                    .then(() => setLoaded(true))
                 }, error => {
                     setUnsupported('Please enable cookies to launch this app.')
                     throw error
@@ -47,7 +50,7 @@ const App = props => {
             })
         }
         document.getElementsByTagName('head')[0].appendChild(script) 
-    }, [isSignedIn, initAuth, initLibrary])
+    }, [isSignedIn, initAuth, initLibrary, validateData])
 
   	return (
         <BrowserRouter>
@@ -76,6 +79,7 @@ export default connect(
     }),
     dispatch => ({
         initAuth: () => dispatch(initAuth()),
-        initLibrary: () => dispatch(initLibrary())
+        initLibrary: () => dispatch(initLibrary()),
+        validateData: () => dispatch(validateData())
     })
 )(App)

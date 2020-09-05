@@ -28,13 +28,13 @@ export const getName = (state, id) => {
     return name
 }
 
-export const getAllVideos = async (state, id, loadPlaylist) => {
+export const getAllVideos = async (state, id, loadItem) => {
     let videos = []
     const recursiveAdd = parentId => {
         if (get(state, parentId).videos) {
             videos = videos.concat(get(state, parentId).videos)
         }
-        return loadPlaylist(parentId).then(() => {
+        return loadItem(parentId).then(() => {
             if (isFolder(state, parentId)) {
                 const folderPromises = get(state, parentId).folders.map((childId) => 
                     recursiveAdd(childId)

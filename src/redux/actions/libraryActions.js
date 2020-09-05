@@ -54,6 +54,18 @@ export const loadItem = id => {
     }
 }
 
+export const loadAllItems = () => {
+    return (dispatch, getState) => {
+        // get all docs with the `name` field (aka all docs except 'metadata')
+        return firestore.collection(getState().firebase.user.uid).orderBy('name').get()
+        .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+                dispatch(setItem(doc.id, doc.data()))
+            })
+        })
+    }
+}
+
 export const setItemName = (id, name) => {
     return (dispatch, getState) => {
         dispatch({ type: 'SET_ITEM_NAME', payload: { id, name, uid: getState().firebase.user.uid } })

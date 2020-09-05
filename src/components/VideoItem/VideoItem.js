@@ -11,6 +11,11 @@ const VideoItem = props => {
     const [author, setAuthor] = useState()
 
     useLayoutEffect(() => {
+        if (id.substr(0, 1) === '!') {
+            setTitle('Video unavailable')
+            setAuthor('ID: ' + id.substr(1))
+            return
+        }
         let mounted = true
         if (videoCache[id] && videoCache[id].title) {
             setTitle(videoCache[id].title)
