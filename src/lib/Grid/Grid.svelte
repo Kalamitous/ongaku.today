@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import { flip } from 'svelte/animate';
+    import { onMount, beforeUpdate, afterUpdate } from 'svelte';
 
     // https://stackoverflow.com/a/72532661
     type Component = $$Generic<typeof SvelteComponentTyped<any, any, any>>;
@@ -12,10 +11,14 @@
     export let itemComponent: Component;
     export let itemsData: any[];
     export let maxScrollSpeed = 8;
+    export let autoScrollThreshold = 50;
     export let scrollElement: HTMLElement = document.documentElement;
     export let onDrop: Function;
 
+    let virtualTop: HTMLDivElement;
+    let virtualBottom: HTMLDivElement;
     let grid: HTMLDivElement;
+    let gridFormatter: HTMLDivElement;
     let dragContainer: HTMLDivElement;
     let draggedItem: {
         element: HTMLElement | null;
@@ -30,12 +33,34 @@
         element: HTMLElement | null;
         itemOffset: { x: number; y: number; };
     }[] = [];
+    let visibleItems: any[] = [];
+    let mounted = false;
     let isAutoScrolling = false;
+    let prevScrollTop = 0;
+    let startIndex = 0;
+    let stopIndex = 0;
 
-    $: if (grid) grid.style.gap = `${gap}px`;
-    $: if (grid) grid.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
+    // non-positive columns will have unintended consequences
+    $: columns = Math.max(columns, 1);
+    $: if (gridFormatter) gridFormatter.style.gap = `${gap}px`;
+    $: if (gridFormatter) gridFormatter.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
+    $: if (columns || gap || itemsData.length !== 0) {
+        // ensure at least one item exists so querySelector('.item') works
+        if (visibleItems.length === 0) visibleItems = [itemsData[0]];
+        if (mounted) handleVirtualization();
+    }
+    $: if (startIndex || stopIndex) {
+        const totalHeight = calculateOffsetFromIndex(itemsData.length - 1 + columns).y - gap;
+        // manually calculate height since grid-formatter hasn't updated yet
+        const gridFormatterHeight = calculateOffsetFromIndex(stopIndex - startIndex + columns).y - gap;
+        const virtualTopHeight = calculateOffsetFromIndex(startIndex).y;
+        const virtualBottomHeight = totalHeight - virtualTopHeight - gridFormatterHeight;
+        virtualTop.style.height = `${virtualTopHeight}px`;
+        virtualBottom.style.height = `${virtualBottomHeight}px`;
+    }
 
     onMount(() => {
+        mounted = true;
         initDraggedItem();
 
         /* There is an issue where scrolling with a dragged item near the top of the viewport
@@ -61,43 +86,30 @@
             }
         }
 
-        function calculateIndexFromPoint(x: number, y: number): number {
+        function calculatePointFromIndex(index: number): { x: number; y: number; } {
             const gridRect = grid.getBoundingClientRect();
-
-            const relativeX = x - gridRect.left;
-            const relativeY = y - gridRect.top;
-
-            // how many columns/rows can there be with the current number of items
-            const maxColumns = Math.min(itemsData.length, columns);
-            const maxRows = Math.ceil(itemsData.length / columns);
-
-            const columnWidth = grid.offsetWidth / columns;
-            let column = Math.floor(relativeX / columnWidth);
-            column = Math.max(column, 0);
-            column = Math.min(column, maxColumns - 1)
-
-            const item = grid.querySelector('.item') as HTMLElement;
-            let row = Math.floor(relativeY / (item.offsetHeight + gap / 2));
-            row = Math.max(row, 0);
-            row = Math.min(row, maxRows - 1)
-
-            let index = row * columns + column;
-            index = Math.min(index, itemsData.length - 1);
-
-            return index;
+            const offset = calculateOffsetFromIndex(index);
+            return {
+                x: gridRect.left + offset.x,
+                y: gridRect.top + offset.y
+            }
         }
 
-        function calculatePointFromIndex(index: number): { x: number; y: number; } {
-            const column = index % columns;
-            const row = Math.floor(index / columns);
-
-            const gridRect = grid.getBoundingClientRect();
-            const item = grid.querySelector('.item') as HTMLElement;
-
-            return {
-                x: gridRect.left + column * (item.offsetWidth + gap),
-                y: gridRect.top + row * (item.offsetHeight + gap)
-            }
+        function animateElement(element: HTMLElement, startPos: { x: number; y: number; }, endPos: { x: number; y: number; }) {
+            // https://aerotwist.com/blog/flip-your-animations/
+            // disallow dragging of in-transition items
+            element.style.pointerEvents = 'none';
+            // need to clear transition to allow for replacing with a new transition before an existing one is over
+            element.style.transition = '';
+            element.style.transform = `translate(${startPos.x - endPos.x}px, ${startPos.y - endPos.y}px)`;
+            requestAnimationFrame(() => {
+                element.style.transition = `transform ${animationDuration}ms`;
+                element.style.transform = '';
+            });
+            element.addEventListener('transitionend', (event: TransitionEvent) => {
+                element.style.pointerEvents = '';
+                element.style.transition = '';
+            });
         }
 
         function updatePlacement() {
@@ -106,57 +118,71 @@
             const draggedItemRect = draggedItem.element.getBoundingClientRect();
             const x = draggedItemRect.left + draggedItemRect.width / 2;
             const y = draggedItemRect.top + draggedItemRect.height / 2;
-
             const index = calculateIndexFromPoint(x, y);
             if (draggedIndex === index) return;
 
             const temp = itemsData[draggedIndex];
             if (index > draggedIndex) {
-                for (let i = draggedIndex; i < index; i++)
-                    itemsData[i] = itemsData[i + 1]
+                for (let i = draggedIndex; i < index; i++) {
+                    itemsData[i] = itemsData[i + 1];
+
+                    const nextItem = gridFormatter.children[i + 1 - startIndex] as HTMLElement;
+                    if (!nextItem) continue;
+                    
+                    const startPos = nextItem.getBoundingClientRect();
+                    const endPos = calculatePointFromIndex(i);
+                    animateElement(nextItem, startPos, endPos);
+                }
             } else {
-                for (let i = draggedIndex; i > index; i--)
-                    itemsData[i] = itemsData[i - 1]
+                for (let i = draggedIndex; i > index; i--) {
+                    itemsData[i] = itemsData[i - 1];
+
+                    const prevItem = gridFormatter.children[i - 1 - startIndex] as HTMLElement;
+                    if (!prevItem) continue;
+                    
+                    const startPos = prevItem.getBoundingClientRect();
+                    const endPos = calculatePointFromIndex(i);
+                    animateElement(prevItem, startPos, endPos);
+                }
+            }
+
+            const dummyItem = gridFormatter.children[draggedIndex - startIndex] as HTMLElement;
+            if (dummyItem) {
+                const startPos = dummyItem.getBoundingClientRect();
+                const endPos = calculatePointFromIndex(index);
+                animateElement(dummyItem, startPos, endPos);
             }
 
             itemsData[index] = temp;
             draggedIndex = index;
+            handleVirtualization(true);
         }
 
-        function handleAutoScroll(selfCall = false) {
+        function handleAutoScroll(selfCall=false) {
             if (isAutoScrolling && !selfCall || !draggedItem.element) return;
 
             const scrollElementRect = scrollElement.getBoundingClientRect();
             const draggedItemRect = draggedItem.element.getBoundingClientRect();
 
-            const scrollLeftPos = Math.max(scrollElementRect.left, 0) + draggedItemRect.width;
-            const scrollRightPos = Math.min(scrollElementRect.right, window.innerWidth) - draggedItemRect.width;
-            const scrollUpPos = Math.max(scrollElementRect.top, 0) + draggedItemRect.height;
-            const scrollDownPos = Math.min(scrollElementRect.bottom, window.innerHeight) - draggedItemRect.height;
+            const scrollLeftPos = Math.max(scrollElementRect.left, 0) + autoScrollThreshold;
+            const scrollRightPos = Math.min(scrollElementRect.right, window.innerWidth) - autoScrollThreshold;
+            const scrollUpPos = Math.max(scrollElementRect.top, 0) + autoScrollThreshold;
+            const scrollDownPos = Math.min(scrollElementRect.bottom, window.innerHeight) - autoScrollThreshold;
 
             let overlapPercent = { x: 0, y: 0 };
-
             if (draggedItemRect.left < scrollLeftPos) {
-                overlapPercent.x = -Math.min((scrollLeftPos - draggedItemRect.left) / draggedItemRect.width, 1);
+                overlapPercent.x = -Math.min((scrollLeftPos - draggedItemRect.left) / autoScrollThreshold, 1);
             } else if (draggedItemRect.right > scrollRightPos) {
-                overlapPercent.x = Math.min((draggedItemRect.right - scrollRightPos) / draggedItemRect.width, 1);
+                overlapPercent.x = Math.min((draggedItemRect.right - scrollRightPos) / autoScrollThreshold, 1);
             }
-
             if (draggedItemRect.top < scrollUpPos) {
-                overlapPercent.y = -Math.min((scrollUpPos - draggedItemRect.top) / draggedItemRect.height, 1);
+                overlapPercent.y = -Math.min((scrollUpPos - draggedItemRect.top) / autoScrollThreshold, 1);
             } else if (draggedItemRect.bottom > scrollDownPos) {
-                overlapPercent.y = Math.min((draggedItemRect.bottom - scrollDownPos) / draggedItemRect.height, 1);
-            }
-
-            // if single drag axis, overlapPercent is likely not 0 for the opposite axis
-            if ((overlapPercent.x === 0 || !dragAxis.includes('x')) && (overlapPercent.y === 0 || !dragAxis.includes('y'))) {
-                isAutoScrolling = false;
-                return;
+                overlapPercent.y = Math.min((draggedItemRect.bottom - scrollDownPos) / autoScrollThreshold, 1);
             }
 
             isAutoScrolling = true;
             scrollElement.scrollBy(maxScrollSpeed * overlapPercent.x, maxScrollSpeed * overlapPercent.y);
-            
             requestAnimationFrame(() => handleAutoScroll(true));
         }
 
@@ -166,11 +192,17 @@
             const item = (event.target as HTMLElement).closest('.item') as HTMLElement;
             if (!item) return;
 
+            let dragHandle = item.querySelector('.drag-handle');
+            if (dragHandle) {
+                dragHandle = (event.target as HTMLElement).closest('.drag-handle') as HTMLElement;
+                if (!dragHandle) return;
+            }
+
             // disables dragging of elements (e.g. images) that are part of the item
             event.preventDefault();
 
             draggedItem.element = item;
-            draggedItem.initialIndex = Array.prototype.indexOf.call(grid.children, item);
+            draggedItem.initialIndex = startIndex + Array.prototype.indexOf.call(gridFormatter.children, item);
 
             // get mouse position relative to ihe item so we can maintain the offset when dragging
             const rect = item.getBoundingClientRect();
@@ -181,27 +213,24 @@
         }
         
         function onMouseMove(event: MouseEvent) {
-            /* handle dragged item */
             if (!draggedItem.element) return;
 
             // the frame we start dragging
             if (!draggedItem.hasDragged) {
                 const realItem = draggedItem.element;
-
-                const index = Array.prototype.indexOf.call(grid.children, realItem);
-                draggedIndex = index;
+                draggedIndex = draggedItem.initialIndex;
                 
                 // do not clone .item div because that contains animation styling in the case that the real item is in the middle of animate:flip
                 draggedItem.element = document.createElement('div');
                 draggedItem.element.appendChild(realItem.firstElementChild?.cloneNode(true) as Node);
                 draggedItem.element.style.position = 'absolute';
                 draggedItem.element.style.width = `${realItem.offsetWidth}px`;
-                draggedItem.element.style.transition = `transform ${animationDuration}ms`;
+                // trigger transitionend even when animationDuration = 0
+                draggedItem.element.style.transition = `transform ${Math.max(animationDuration, 1)}ms`;
                 // allow the mouseover listener to detect underneath the dragged item
                 draggedItem.element.style.pointerEvents = 'none';
 
                 draggedItem.hasDragged = true;
-
                 dragContainer.appendChild(draggedItem.element);
             }
 
@@ -211,8 +240,7 @@
             if (dragAxis.includes('x')) draggedItem.element.style.left = `${x}px`;
             if (dragAxis.includes('y')) draggedItem.element.style.top = `${y}px`;
 
-            // no need to call updatePlacement twice since it is also called in the scroll listener
-            if (!isAutoScrolling) updatePlacement();
+            updatePlacement();
             handleAutoScroll();
         }
 
@@ -224,8 +252,8 @@
                 return;
             }
 
-            const realItemRect = calculatePointFromIndex(draggedIndex);
             const draggedItemRect = draggedItem.element.getBoundingClientRect();
+            const realItemRect = calculatePointFromIndex(draggedIndex);
             draggedItem.element.style.transform = `translate(${realItemRect.x - draggedItemRect.left}px, ${realItemRect.y - draggedItemRect.top}px)`;
             draggedItem.element.addEventListener('transitionend', (event: TransitionEvent) => {
                 residualDraggedItems.shift();
@@ -236,7 +264,7 @@
             });
 
             if (draggedItem.initialIndex !== draggedIndex) {
-                const newIds = Array.from(grid.children).map(item => (item as HTMLElement).dataset.id);
+                const newIds = itemsData.map(item => item.id);
                 onDrop(newIds);
             }
 
@@ -264,20 +292,92 @@
             })
 
             updatePlacement();
+            handleVirtualization();
         }
 
-        grid.addEventListener('mousedown', onMouseDown);
+        gridFormatter.addEventListener('mousedown', onMouseDown);
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
         document.addEventListener('scroll', onScroll);
 
         return () => {
-            grid.removeEventListener('mousedown', onMouseDown);
+            gridFormatter.removeEventListener('mousedown', onMouseDown);
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
             document.removeEventListener('scroll', onScroll);
         }
     });
+
+    // fixes stuttering when scrolling down right above the last item
+    beforeUpdate(() => {
+        prevScrollTop = scrollElement.scrollTop;
+    })
+    afterUpdate(() => {
+        scrollElement.scrollTop = prevScrollTop;
+    })
+
+    function calculateOffsetFromIndex(index: number): { x: number; y: number; } {
+        const column = index % columns;
+        const row = Math.floor(index / columns);
+        const item = gridFormatter.querySelector('.item') as HTMLElement;
+        return {
+            x: column * (item.offsetWidth + gap),
+            y: row * (item.offsetHeight + gap)
+        }
+    }
+    
+    function calculateIndexFromPoint(x: number, y: number): number {
+        const gridRect = grid.getBoundingClientRect();
+
+        const relativeX = x - gridRect.left;
+        const relativeY = y - gridRect.top;
+
+        // how many columns can there be with the current number of items
+        const maxColumns = Math.min(itemsData.length, columns);
+        const maxRows = Math.ceil(itemsData.length / columns);
+
+        const columnWidth = grid.offsetWidth / columns;
+        let column = Math.floor(relativeX / columnWidth);
+        column = Math.max(column, 0);
+        column = Math.min(column, maxColumns - 1)
+
+        const item = gridFormatter.querySelector('.item') as HTMLElement;
+        let row = Math.floor(relativeY / (item.offsetHeight + gap / 2));
+        row = Math.max(row, 0);
+        row = Math.min(row, maxRows - 1)
+
+        let index = row * columns + column;
+        index = Math.min(index, itemsData.length - 1);
+
+        return index;
+    }
+
+    function isGridOutOfView(): boolean {
+        const gridRect = grid.getBoundingClientRect();
+        const x = gridRect.left > window.innerWidth || gridRect.right < 0;
+        const y = gridRect.top > window.innerHeight || gridRect.bottom < 0;
+        return x || y;
+    }
+
+    function handleVirtualization(forceUpdate=false) {
+        if (!grid || visibleItems.length === 0) return;
+
+        let _startIndex;
+        let _stopIndex;
+        if (isGridOutOfView()) {
+            _startIndex = 0;
+            _stopIndex = -1;
+        } else {
+            _startIndex = calculateIndexFromPoint(0, 0);
+            _stopIndex = calculateIndexFromPoint(window.innerWidth, window.innerHeight);
+        }
+
+        if (!forceUpdate && startIndex == _startIndex && stopIndex == _stopIndex) return;
+
+        startIndex = _startIndex;
+        stopIndex = _stopIndex;
+        visibleItems = itemsData.slice(startIndex, stopIndex + 1);
+    }
 </script>
 
 <style>
@@ -289,7 +389,7 @@
         padding: 0!important;
     }
 
-    .grid {
+    .grid-formatter {
         display: grid;
     }
 
@@ -301,20 +401,16 @@
 
 <div class="drag-container" bind:this={dragContainer} />
 <div class="grid" bind:this={grid}>
-    {#each itemsData as item, index (item.id)}
-        <div
-            class={index === draggedIndex || residualDummyIndices.includes(index) ? 'item dummy' : 'item'}
-            data-id={item.id}
-            animate:flip={{ duration: animationDuration }}
-        >
-            <svelte:component this={itemComponent} {item} />
-        </div>
-    {/each}
+    <div bind:this={virtualTop} />
+    <div class="grid-formatter" bind:this={gridFormatter}>
+        {#each visibleItems as item, index (item.id)}
+            <div
+                class={startIndex + index === draggedIndex || residualDummyIndices.includes(startIndex + index) ? 'item dummy' : 'item'}
+                data-id={item.id}
+            >
+                <svelte:component this={itemComponent} {item} />
+            </div>
+        {/each}
+    </div>
+    <div bind:this={virtualBottom} />
 </div>
-
-<!-- 
-todo:
-small delay before placement update
-drag handles
-virtualization
--->

@@ -39,6 +39,11 @@
     LibraryData.addVideo('clqoJzzTUN0');
     LibraryData.addVideo('dlqoJzzTUN0');
     LibraryData.addVideo('elqoJzzTUN0');
+    LibraryData.addVideo('elaoJzzTUN0');
+    LibraryData.addVideo('elqbJzzTUN0');
+    LibraryData.addVideo('elvoJzzTUN0');
+    LibraryData.addVideo('eldoJzzTUN0');
+    LibraryData.addVideo('eleoJzzTUN0');
 </script>
 
 <div class="flex-col space-y-8">
