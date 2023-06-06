@@ -1,16 +1,23 @@
-<div class="flex items-center py-4">
-    <div class="flex basis-[15%] px-4">
-        <a class="text-xl">ongaku.today</a>
+<script lang="ts">
+    import IconSearch from '~icons/material-symbols/search-rounded';
+</script>
+
+<div class="navbar">
+    <div class="navbar-start">
+        <a class="px-4 text-xl">ongaku.today</a>
     </div>
-    <div class="flex grow items-center justify-between">
-        <div class="input-group">
-            <input type="text" placeholder="Search" class="input input-bordered w-full max-w-2xl" />
-            <button class="btn">Search</button>
-        </div>
+    <div class="navbar-center flex">
+        <ul class="menu menu-horizontal px-1">
+            <li><a href="/">Library</a></li>
+            <li><a href="/queue">Queue</a></li>
+            <li><a><IconSearch />Search</a></li>
+        </ul>
+    </div>
+    <div class="navbar-end">
         <div class="avatar placeholder px-4">
             <div class="bg-neutral-focus text-neutral-content rounded-full w-12">
                 <span>MX</span>
             </div>
-        </div> 
-    </div>
+        </div>
+    </div> 
 </div>

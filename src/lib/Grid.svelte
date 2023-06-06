@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount, beforeUpdate, afterUpdate } from 'svelte';
+    import { onMount } from 'svelte';
 
     // https://stackoverflow.com/a/72532661
     type Component = $$Generic<typeof SvelteComponentTyped<any, any, any>>;
@@ -36,7 +36,6 @@
     let visibleItems: any[] = [];
     let mounted = false;
     let isAutoScrolling = false;
-    let prevScrollTop = 0;
     let startIndex = 0;
     let stopIndex = 0;
 
@@ -44,7 +43,7 @@
     $: columns = Math.max(columns, 1);
     $: if (gridFormatter) gridFormatter.style.gap = `${gap}px`;
     $: if (gridFormatter) gridFormatter.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
-    $: if (columns || gap || itemsData.length !== 0) {
+    $: if ((columns || gap) && itemsData && itemsData.length !== 0) {
         // ensure at least one item exists so querySelector('.item') works
         if (visibleItems.length === 0) visibleItems = [itemsData[0]];
         if (mounted) handleVirtualization();
@@ -298,23 +297,23 @@
         gridFormatter.addEventListener('mousedown', onMouseDown);
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
-        document.addEventListener('scroll', onScroll);
+        if (scrollElement === document.documentElement) {
+            document.addEventListener('scroll', onScroll);
+        } else{
+            scrollElement.addEventListener('scroll', onScroll);
+        }
 
         return () => {
             gridFormatter.removeEventListener('mousedown', onMouseDown);
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
-            document.removeEventListener('scroll', onScroll);
+            if (scrollElement === document.documentElement) {
+                document.removeEventListener('scroll', onScroll);
+            } else{
+                scrollElement.removeEventListener('scroll', onScroll);
+            }
         }
     });
-
-    // fixes stuttering when scrolling down right above the last item
-    beforeUpdate(() => {
-        prevScrollTop = scrollElement.scrollTop;
-    })
-    afterUpdate(() => {
-        scrollElement.scrollTop = prevScrollTop;
-    })
 
     function calculateOffsetFromIndex(index: number): { x: number; y: number; } {
         const column = index % columns;
@@ -366,7 +365,7 @@
         let _stopIndex;
         if (isGridOutOfView()) {
             _startIndex = 0;
-            _stopIndex = -1;
+            _stopIndex = 0;
         } else {
             _startIndex = calculateIndexFromPoint(0, 0);
             _stopIndex = calculateIndexFromPoint(window.innerWidth, window.innerHeight);
@@ -376,14 +375,18 @@
 
         startIndex = _startIndex;
         stopIndex = _stopIndex;
-        visibleItems = itemsData.slice(startIndex, stopIndex + 1);
+        if (stopIndex === startIndex) {
+            visibleItems = [];
+        } else {
+            visibleItems = itemsData.slice(startIndex, stopIndex + 1);
+        }
     }
 </script>
 
 <style>
     .drag-container {
         position: fixed;
-        z-index: 9999;
+        z-index: 1;
         /* remove any inherited margin and padding */
         margin: 0!important;
         padding: 0!important;

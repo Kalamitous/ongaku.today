@@ -1,10 +1,11 @@
 <script lang="ts">
     import LibraryData, { Folder, Playlist } from './data';
-    import Grid from './Grid/Grid.svelte';
+    import Grid from './Grid.svelte';
     import FolderCard from './FolderCard.svelte';
     import PlaylistCard from './PlaylistCard.svelte';
 
     export let item: Folder;
+    export let scrollableBody: HTMLElement;
 
     let clientWidth = 0;
 
@@ -18,7 +19,7 @@
     $: playlistItemsData = playlists.map(playlist => (
         { id: playlist.id, playlist: playlist, onClick: () => handleClickItem(playlist.id) }
     ));
-    $: columns = Math.floor(clientWidth / 300);
+    $: columns = Math.floor(clientWidth / 250);
 
     function handleCreateFolder() {
         LibraryData.createFolder();
@@ -41,8 +42,8 @@
 	}
 </script>
 
-<div class="flex-col space-y-8" bind:clientWidth>
-    <div class="flex space-x-4">
+<div class="flex-col space-y-4" bind:clientWidth>
+    <div class="grid gap-2 grid-cols-2">
         <button class="btn" on:click={handleCreateFolder}>+ Create Folder</button>
         <button class="btn" on:click={handleCreatePlaylist}>+ Create Playlist</button>
     </div>
@@ -53,6 +54,7 @@
             gap={8}
             itemComponent={FolderCard}
             itemsData={folderItemsData}
+            scrollElement={scrollableBody}
             onDrop={onDropFolder}
         />
     {/if}
@@ -63,6 +65,7 @@
             gap={8}
             itemComponent={PlaylistCard}
             itemsData={playlistItemsData}
+            scrollElement={scrollableBody}
             onDrop={onDropPlaylist}
         />
     {/if}

@@ -1,9 +1,10 @@
 <script lang="ts">
     import LibraryData, { Playlist } from './data';
-    import Grid from './Grid/Grid.svelte'
+    import Grid from './Grid.svelte'
     import VideoCard from './VideoCard.svelte'
 
     export let item: Playlist;
+    export let scrollableBody: HTMLElement;
 
     let videoUrl: string;
 
@@ -46,9 +47,10 @@
     LibraryData.addVideo('eleoJzzTUN0');
 </script>
 
-<div class="flex-col space-y-8">
+
+<div class="flex-col space-y-4">
     <div class="input-group">
-        <input type="text" placeholder="Enter YouTube link" class="input input-bordered w-full max-w-2xl" bind:value={videoUrl} />
+        <input type="text" placeholder="Enter YouTube link" class="input input-bordered w-full" bind:value={videoUrl} />
         <button class="btn" on:click={handleAddVideo}>Add Video</button>
     </div>
     <div />
@@ -56,6 +58,7 @@
         gap={4}
         itemComponent={VideoCard}
         dragAxis='y'
+        scrollElement={scrollableBody}
         {itemsData}
         {onDrop}
     />
