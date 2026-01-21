@@ -1,43 +1,52 @@
 {
-  "name": "ongaku.today",
+  "name": "ongaku-today",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@material-ui/core": "^4.8.3",
-    "@material-ui/icons": "^4.5.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.4.0",
-    "@testing-library/user-event": "^7.2.1",
-    "firebase": "^7.14.3",
-    "react": "^16.12.0",
-    "react-device-detect": "^1.13.1",
-    "react-dom": "^16.12.0",
-    "react-redux": "^7.1.3",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0",
-    "react-sortable-hoc": "^1.10.1",
-    "react-virtualized": "^9.21.2",
-    "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
-  },
   "scripts": {
-    "start": "set PORT=5000 && react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint ."
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "dependencies": {
+    "@base-ui/react": "^1.1.0",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/modifiers": "^9.0.0",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@radix-ui/react-alert-dialog": "^1.1.15",
+    "@radix-ui/react-checkbox": "^1.3.1",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-dropdown-menu": "^2.1.14",
+    "@radix-ui/react-label": "^2.1.6",
+    "@radix-ui/react-scroll-area": "^1.2.10",
+    "@radix-ui/react-slot": "^1.2.2",
+    "@supabase/ssr": "latest",
+    "@supabase/supabase-js": "latest",
+    "@tanstack/react-virtual": "^3.13.18",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "fractional-indexing": "^3.2.0",
+    "lucide-react": "^0.562.0",
+    "next": "latest",
+    "next-themes": "^0.4.6",
+    "radix-ui": "^1.4.3",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "shadcn": "^3.7.0",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss": "^4",
+    "tw-animate-css": "^1.4.0",
+    "zustand": "^5.0.10"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version"
-    ]
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.1",
+    "typescript": "^5"
   }
 }

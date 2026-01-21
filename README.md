@@ -1,131 +1,109 @@
-<br />
+<a href="https://demo-nextjs-with-supabase.vercel.app/">
+  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
+  <h1 align="center">Next.js and Supabase Starter Kit</h1>
+</a>
+
 <p align="center">
-  <a href="https://github.com/Kalamitous/ongaku.today">
-    <img src="https://i.imgur.com/1RJvusK.png" alt="Logo" width="80" height="80">
-  </a>
-
-  <h3 align="center">ongaku.today</h3>
-
-  <p align="center">
-    A robust playlist manager for YouTube.
-    <br />
-    <a href="https://ongaku.today"><strong>Visit the app »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/Kalamitous/ongaku.today/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/Kalamitous/ongaku.today/issues">Request Feature</a>
-  </p>
+ The fastest way to build apps with Next.js and Supabase
 </p>
 
+<p align="center">
+  <a href="#features"><strong>Features</strong></a> ·
+  <a href="#demo"><strong>Demo</strong></a> ·
+  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
+  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
+  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
+  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
+</p>
+<br/>
 
-## Table of Contents
+## Features
 
-* [About](#about)
-  * [Built With](#built-with)
-* [Getting Started](#getting-started)
-  * [Firebase Setup](#firebase-setup)
-  * [Project Setup](#project-setup)
-  * [Installing & Running](#installing--running)
-* [Contributing](#contributing)
-* [License](#license)
-* [Acknowledgements](#acknowledgements)
+- Works across the entire [Next.js](https://nextjs.org) stack
+  - App Router
+  - Pages Router
+  - Proxy
+  - Client
+  - Server
+  - It just works!
+- supabase-ssr. A package to configure Supabase Auth to use cookies
+- Password-based authentication block installed via the [Supabase UI Library](https://supabase.com/ui/docs/nextjs/password-based-auth)
+- Styling with [Tailwind CSS](https://tailwindcss.com)
+- Components with [shadcn/ui](https://ui.shadcn.com/)
+- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
+  - Environment variables automatically assigned to Vercel project
 
+## Demo
 
-## About
+You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
 
-[![ongaku.today Screenshot][product-screenshot]](https://ongaku.today)
+## Deploy to Vercel
 
-**ongaku.today** makes using YouTube as a music streaming platform easier.
+Vercel deployment will guide you through creating a Supabase account and project.
 
-With YouTube, videos can only be organized into playlists.
-**ongaku.today** takes this one step further and lets you to organize playlists into folders.
-This nested structure of folders and playlists not only helps you keep track of videos better, but also plays well with our queueing system.
-**ongaku.today** allows you to mix and match individual videos, playlists, or folders to be added to the queue.
-You will always have full control over what is playing.
+After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
 
-For convenience, **ongaku.today** has integrated YouTube search and playlist importing functionality.
-Night mode can be toggled for your preferred viewing experience.
-**ongaku.today** is still early in development with many new features planned.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
 
-### Built With
+The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
 
-* [React](https://reactjs.org)
-* [Redux](https://redux.js.org)
-* [Firebase](https://firebase.google.com)
-* [YouTube Data API](https://developers.google.com/youtube/v3)
+If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
 
+## Clone and run locally
 
-## Getting Started
+1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
 
-To get **ongaku.today** running on your local machine, follow these steps. Make sure you have [Node.js](https://nodejs.org) installed.
+2. Create a Next.js app using the Supabase Starter template npx command
 
-### Firebase Setup
+   ```bash
+   npx create-next-app --example with-supabase with-supabase-app
+   ```
 
-1. Create a new [Firebase](https://firebase.google.com) project
-2. Add a web app by going to your project settings
-3. Create a Cloud Firestore database in `Test mode`
-4. Enable Google sign-in by going to `Authentication > Sign-in method`
-5. Enable [YouTube Data API](https://console.developers.google.com/apis/library/youtube.googleapis.com?q=youtube&id=125bab65-cfb6-4f25-9826-4dcc309bc508)
+   ```bash
+   yarn create next-app --example with-supabase with-supabase-app
+   ```
 
-### Project Setup
+   ```bash
+   pnpm create next-app --example with-supabase with-supabase-app
+   ```
 
-1. Clone the repository
-```sh
-git clone https://github.com/Kalamitous/ongaku.today.git
-```
-2. Create the following `.env` file at the root of the cloned repository
-```
-REACT_APP_FIREBASE_API_KEY=
-REACT_APP_FIREBASE_AUTH_DOMAIN=
-REACT_APP_FIREBASE_DATABASE_URL=
-REACT_APP_FIREBASE_PROJECT_ID=
-REACT_APP_FIREBASE_STORAGE_BUCKET=
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID=
-REACT_APP_FIREBASE_APP_ID=
+3. Use `cd` to change into the app's directory
 
-REACT_APP_YOUTUBE_API_KEY=
-REACT_APP_YOUTUBE_CLIENT_ID=
-```
-3. Fill in the top portion of the `.env` file with the configuration of your Firebase project web app from step 3 of [Firebase Setup](#firebase-setup)
-4. Fill in the bottom portion of the `.env` file with the API key and OAuth client ID found in your project's [Credentials page](https://console.developers.google.com/apis/credentials)
+   ```bash
+   cd with-supabase-app
+   ```
 
-### Installing & Running
+4. Rename `.env.example` to `.env.local` and update the following:
 
-1. Install dependencies
-```sh
-npm install
-```
-2. Run the app
-```sh
-npm start
-```
+  ```env
+  NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=[INSERT SUPABASE PROJECT API PUBLISHABLE OR ANON KEY]
+  ```
+  > [!NOTE]
+  > This example uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, which refers to Supabase's new **publishable** key format.
+  > Both legacy **anon** keys and new **publishable** keys can be used with this variable name during the transition period. Supabase's dashboard may show `NEXT_PUBLIC_SUPABASE_ANON_KEY`; its value can be used in this example.
+  > See the [full announcement](https://github.com/orgs/supabase/discussions/29260) for more information.
 
-You should now be able to access the app at [http://localhost:5000](http://localhost:5000)
+  Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` can be found in [your Supabase project's API settings](https://supabase.com/dashboard/project/_?showConnect=true)
 
-## Contributing
+5. You can now run the Next.js local development server:
 
-Contributions to add features or resolve issues are welcome.
+   ```bash
+   npm run dev
+   ```
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/Name`) or issue branch (`git checkout -b issue/Name`)
-3. Commit your changes (`git commit -m 'Message'`)
-4. Push to the branch (`git push origin feature/Name`)
-5. Open a pull request
+   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
 
+6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
 
-## License
+> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
 
-Distributed under the MIT License. See `LICENSE` for more information.
+## Feedback and issues
 
+Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
 
-## Acknowledgements
-* [Material UI Icons](https://www.npmjs.com/package/@material-ui/icons)
-* [React Device Detect](https://github.com/duskload/react-device-detect)
-* [React Router](https://reactrouter.com)
-* [React Sortable HOC](https://github.com/clauderic/react-sortable-hoc)
-* [React Virtualized](https://github.com/bvaughn/react-virtualized)
-* [Redux Thunk](https://github.com/reduxjs/redux-thunk)
+## More Supabase examples
 
-
-[product-screenshot]: https://i.imgur.com/4gQjpA4.png
+- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
+- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
+- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
