@@ -50,10 +50,10 @@ export interface Track {
   artist: string | null;
   folder_id: string;
   user_id: string;
+  position: string;
 }
 
 export interface CreateTrackData {
-  url: string;
   source: Source;
   source_id: string;
   title: string;
@@ -65,4 +65,11 @@ export interface AddTrackDialogProps {
   onConfirm: (data: CreateTrackData) => void;
   folderId: string;
   triggerButton?: React.ReactNode;
+}
+
+// Mixed list types for cross-entity DND
+export interface MixedItem {
+  id: string;
+  type: 'folder' | 'track';
+  data: any; // Folder or Track - using any to avoid circular imports
 }

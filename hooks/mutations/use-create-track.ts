@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { trackKeys } from '@/lib/tanstack-query/keys';
 import { createTrack as createTrackApi } from '@/lib/api/tracks';
+import { getPositionBetween } from '@/utils/fractional-indexing';
 import { sortTracksByPosition } from '@/utils/sort-utils';
 import type { CreateTrackData } from '@/types/library.types';
 import type { Track } from '@/types/library.types';
@@ -22,8 +23,16 @@ export function useCreateTrack() {
         trackKeys.list(folderId)
       );
       
-      // Apply sorting for consistency (though tracks don't use position currently)
-      const sortedTracks = sortTracksByPosition(previousTracks || []);
+// Apply same sorting that useTracks uses for consistency
+      const currentTracks = sortTracksByPosition(previousTracks || []);
+      
+      // Calculate position for new track (at end of list)
+      const newPosition = currentTracks.length === 0 
+        ? 'a0' 
+        : getPositionBetween(
+            currentTracks[currentTracks.length - 1].position,
+            null
+          );
       
       const optimisticTrack: Track = {
         id: `temp-${Date.now()}`,
@@ -33,6 +42,7 @@ export function useCreateTrack() {
         artist: data.artist || null,
         folder_id: folderId,
         user_id: 'current-user',
+        position: newPosition,
       };
       
       queryClient.setQueryData(

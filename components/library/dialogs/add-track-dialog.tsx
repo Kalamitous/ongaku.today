@@ -52,14 +52,11 @@ export function AddTrackDialog({
 
     // Proceed if we have valid source data
     if (sourceData) {
-      // Capture URL before resetting form
-      const finalUrl = urlToProcess;
       const finalTitle = title.trim() || `Track from ${SourceUtils.getSourceName(sourceData.source)}`;
       const finalArtist = artist.trim() || undefined;
       
       setDialogOpen(false);
       onConfirm({
-        url: finalUrl, // Include the URL too
         source: sourceData.source,
         source_id: sourceData.id,
         title: finalTitle || `Track from ${SourceUtils.getSourceName(sourceData.source)}`,
