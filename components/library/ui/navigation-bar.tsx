@@ -12,12 +12,17 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { EditFolderDialog } from "../dialogs/edit-folder-dialog";
-import type { LibraryBreadcrumbItem, NavigationBarProps } from "@/types/library.types";
+import { useFolder } from "@/hooks/queries/use-folder";
+import type { NavigationBarProps } from "@/types/library.types";
 
-export function NavigationBar({ path, onNavigateToBreadcrumb, onUpdateFolder, onDeleteFolder }: NavigationBarProps) {
+export function NavigationBar({ path, onNavigateToBreadcrumb, onUpdateFolder, onDelete }: NavigationBarProps) {
   // Show Edit button only when not at root
   const currentFolder = path[path.length - 1];
   const showEditButton = currentFolder && currentFolder.id !== "root";
+  
+  // Get full folder data to access parent_id
+  const { data: fullFolderData } = useFolder(currentFolder?.id || null);
+  const actualParentId = fullFolderData?.parent_id || null;
 
   return (
     <div className="flex items-center gap-2 pb-2 border-b">
@@ -49,13 +54,13 @@ export function NavigationBar({ path, onNavigateToBreadcrumb, onUpdateFolder, on
 
       {/* Edit Folder Button - only show when not at root */}
       {showEditButton && currentFolder && (
-        <EditFolderDialog
-          folderId={currentFolder.id}
-          currentName={currentFolder.name}
-          explorerPath={path}
-          onUpdate={onUpdateFolder}
-          onDelete={onDeleteFolder}
-          triggerButton={
+          <EditFolderDialog
+            folderId={currentFolder.id}
+            currentName={currentFolder.name}
+            initialParentId={actualParentId}
+            onUpdate={onUpdateFolder}
+            onDelete={onDelete}
+            triggerButton={
             <Button
               key="edit-folder"
               variant="ghost"

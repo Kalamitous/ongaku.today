@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAllFoldersFromCache } from "./queries/use-all-folders-from-cache";
+import { folderUtils } from "@/utils/folder-utils";
 import type { LibraryBreadcrumbItem } from "@/types/library.types";
 
 /**
@@ -11,6 +13,22 @@ import type { LibraryBreadcrumbItem } from "@/types/library.types";
 export function useLibraryNavigation(initialPath: LibraryBreadcrumbItem[]) {
   const [currentPath, setCurrentPath] = useState(initialPath);
   
+  // Subscribe to folder cache changes for automatic path rebuilding
+  const allFolders = useAllFoldersFromCache()
+  
+  // Rebuild path when folder relationships change
+  useEffect(() => {
+    if (currentPath.length > 1) {
+      const currentFolderId = currentPath[currentPath.length - 1].id;
+      const rebuiltPath = folderUtils.buildPathFromFolders(allFolders, currentFolderId);
+      
+      // Only update if path actually changed (prevent infinite loops)
+      if (JSON.stringify(rebuiltPath) !== JSON.stringify(currentPath)) {
+        setCurrentPath(rebuiltPath);
+      }
+    }
+  }, [allFolders, currentPath.length]);
+
   const getCurrentParentId = (): string | null => {
     if (currentPath.length <= 1) {
       return null; // Root level

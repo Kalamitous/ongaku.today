@@ -1,4 +1,5 @@
 import type { Folder, LibraryBreadcrumbItem } from "@/types/library.types";
+import { ROOT_FOLDER } from "@/constants/library";
 
 export const folderUtils = {
   // Validation & formatting
@@ -13,18 +14,28 @@ export const folderUtils = {
   // Path helpers
   buildPathFromFolders: (folders: Folder[], folderId: string): LibraryBreadcrumbItem[] => {
     const path: LibraryBreadcrumbItem[] = [];
+    const visitedIds = new Set<string>();
     
     let currentFolderId: string | null = folderId;
     
     while (currentFolderId !== null) {
+      // Detect circular references
+      if (visitedIds.has(currentFolderId)) {
+        break;
+      }
+      
       const folder = folders.find(f => f.id === currentFolderId);
       if (!folder) {
         break;
       }
       
-      path.unshift({ id: folder.id, name: folder.name });
+      visitedIds.add(currentFolderId);
+      path.push({ id: folder.id, name: folder.name });
       currentFolderId = folder.parent_id;
     }
+
+    path.push(ROOT_FOLDER);
+    path.reverse();
     
     return path;
   },

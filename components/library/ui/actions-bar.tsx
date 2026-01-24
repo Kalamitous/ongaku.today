@@ -7,7 +7,7 @@ import { NewFolderDialog } from "../dialogs/new-folder-dialog";
 import { AddTrackDialog } from "../dialogs/add-track-dialog";
 import type { ActionsBarProps } from "@/types/library.types";
 
-export function ActionsBar({ onCreateFolder, onAddTrack, currentFolderId }: ActionsBarProps) {
+export function ActionsBar({ onCreateFolder, onAddTrack, onDeleteFolder, currentFolderId }: ActionsBarProps) {
   return (
     <div className="flex items-center gap-2">
       <NewFolderDialog 
@@ -19,11 +19,11 @@ export function ActionsBar({ onCreateFolder, onAddTrack, currentFolderId }: Acti
           </Button>
         }
       />
-      <AddTrackDialog
+      <AddTrackDialog 
         folderId={currentFolderId || ""}
         onConfirm={(data) => {
           if (onAddTrack) {
-            onAddTrack(data); // Pass the complete data object
+            onAddTrack(data);
           }
         }}
         triggerButton={

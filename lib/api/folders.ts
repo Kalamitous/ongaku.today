@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
-import { getPositionBetween, getInitialPositions } from "@/utils/fractional-indexing";
+import { getPositionBetween } from "@/utils/fractional-indexing";
 
 export interface Folder {
   id: string;

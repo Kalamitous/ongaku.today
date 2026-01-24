@@ -7,13 +7,12 @@ import type { ExplorerProps } from "@/types/library.types";
 
 export function Explorer({
   allFolders,
-  currentParentId,
   selectedParentId,
   onSelectFolder,
   onNavigate,
   loading = false
 }: ExplorerProps) {
-  const currentLevelFolders = allFolders.filter(folder => folder.parent_id === currentParentId);
+  const currentLevelFolders = allFolders;
 
   if (loading) {
     return <FolderSkeletonList />;

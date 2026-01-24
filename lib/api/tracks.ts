@@ -1,6 +1,5 @@
 import type { Track, CreateTrackData } from "@/types/library.types";
 import { createClient } from "@/lib/supabase/client";
-import { VALIDATION } from "@/constants/library";
 
 export async function createTrack(data: CreateTrackData): Promise<Track> {
   const supabase = await createClient();

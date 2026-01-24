@@ -1,45 +1,47 @@
-import { useRef, useState, useMemo } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { DndContext, DragOverlay, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { useFolderStore } from '@/stores/folder-store';
-import { useFolderData } from '@/hooks/use-folder-data';
+import { useReorderFolders } from '@/hooks/mutations/use-reorder-folders';
 import { SortableFolder } from './draggable-folder';
 import { FolderDragOverlay } from './folder-drag-overlay';
 import { Folder } from '@/lib/api/folders';
 
 interface VirtualizedSortableListProps {
-  parentId: string | null;
+  folders: Folder[]; // Changed from parentId to folders array
+  parentId: string | null; // Kept for mutations
   onSelectFolder: (folderId: string, folderName: string) => void;
   selectedParentId: string | null;
   containerHeight?: number;
 }
 
 export function VirtualizedSortableList({ 
+  folders, // Receive data directly instead of fetching
   parentId, 
   onSelectFolder, 
   selectedParentId,
   containerHeight = 600 
 }: VirtualizedSortableListProps) {
-  const { reorderFolders } = useFolderStore();
-  const { folders } = useFolderData(parentId);
+  const reorderFolders = useReorderFolders();
   const [isDragging, setIsDragging] = useState(false);
-  const [activeId, setActiveId] = useState<string | null>(null);
   const [activeFolder, setActiveFolder] = useState<Folder | null>(null);
+  const [localFolders, setLocalFolders] = useState<Folder[]>(folders);
   const parentRef = useRef<HTMLDivElement>(null);
-
-  const overlayContent = useMemo(() => {
+  
+  // Sync local state with prop data for instant updates
+  useEffect(() => {
+    setLocalFolders(folders || []);
+  }, [folders]);
+  
+  const overlayContent = () => {
     if (!activeFolder) return null;
-    
-    return (
-      <FolderDragOverlay folder={activeFolder} />
-    );
-  }, [activeFolder]);
+    return <FolderDragOverlay folder={activeFolder} />;
+  };
 
   const virtualizer = useVirtualizer({
-    count: folders.length,
+    count: localFolders.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 48, // Fixed height based on FolderItem
     overscan: 5, // Render 5 extra items off-screen
@@ -59,21 +61,27 @@ export function VirtualizedSortableList({
   function handleDragStart(event: any) {
     setIsDragging(true);
     const { active } = event;
-    setActiveId(active.id as string);
-    const folder = folders.find(f => f.id === active.id);
+    const folder = localFolders.find(f => f.id === active.id);
     setActiveFolder(folder || null);
   }
 
   function handleDragEnd(event: any) {
     const { active, over } = event;
-    if (active.id !== over?.id) {
-      const oldIndex = folders.findIndex(folder => folder.id === active.id);
-      const newIndex = folders.findIndex(folder => folder.id === over.id);
-      reorderFolders(parentId, oldIndex, newIndex);
+    const draggedItemIndex = localFolders.findIndex(folder => folder.id === active.id);
+    const targetIndex = over ? localFolders.findIndex(folder => folder.id === over.id) : -1;
+    
+    // Update local state immediately (instant like Zustand)
+    if (active.id !== over?.id && draggedItemIndex !== -1 && targetIndex !== -1) {
+      const newFolders = [...localFolders];
+      const [movedFolder] = newFolders.splice(draggedItemIndex, 1);
+      newFolders.splice(targetIndex, 0, movedFolder);
+      setLocalFolders(newFolders);
+      
+      // Then trigger mutation for server sync
+      reorderFolders.mutate({ parentId, oldIndex: draggedItemIndex, newIndex: targetIndex });
     }
     
     // Clear drag states
-    setActiveId(null);
     setActiveFolder(null);
     setIsDragging(false);
   }
@@ -88,7 +96,7 @@ export function VirtualizedSortableList({
         modifiers={[restrictToVerticalAxis]}
       >
         <SortableContext 
-          items={folders.map(folder => folder.id)}
+          items={localFolders.map(folder => folder.id)}
           strategy={verticalListSortingStrategy}
         >
           <div 
@@ -106,7 +114,7 @@ export function VirtualizedSortableList({
               }}
             >
               {virtualizer.getVirtualItems().map((virtualItem) => {
-                const folder = folders[virtualItem.index];
+                const folder = localFolders[virtualItem.index];
                 return (
                   <div
                     key={folder.id}
@@ -137,7 +145,7 @@ export function VirtualizedSortableList({
         
         {createPortal(
           <DragOverlay>
-            {overlayContent}
+            {overlayContent()}
           </DragOverlay>,
           document.body
         )}

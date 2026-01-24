@@ -11,21 +11,21 @@ export interface NavigationBarProps {
   path: LibraryBreadcrumbItem[];
   onNavigateToBreadcrumb: (index: number) => void;
   onUpdateFolder: (folderId: string, folderName: string, selectedParentId: string | null) => void;
-  onDeleteFolder: (folderId: string) => void;
+  onDelete: (folderId: string) => void;
 }
 
 export interface ActionsBarProps {
   onCreateFolder: (folderName: string) => void;
   onAddTrack?: (data: CreateTrackData) => void;
+  onDeleteFolder?: (folderId: string) => void;
   currentFolderId?: string;
 }
 
 export interface ExplorerProps {
   allFolders: import("@/lib/api/folders").Folder[];
-  currentParentId: string | null;
   selectedParentId: string | null;
   onSelectFolder: (folderId: string | null) => void;
-  onNavigate: (folderId: string, folderName: string) => void;
+  onNavigate: (folderId: string, folderName?: string) => void;
   loading?: boolean;
 }
 
