@@ -2,7 +2,7 @@
 
 import { Folder } from '@/lib/api/folders';
 import { FolderItem } from './folder-item';
-import { SortableItem } from './sortable-item';
+import { DraggableItem } from './draggable-item';
 
 interface SortableFolderProps {
   folder: Folder;
@@ -13,13 +13,20 @@ interface SortableFolderProps {
 
 export function SortableFolder({ folder, isSelected = false, onClick, onContextMenu }: SortableFolderProps) {
   return (
-    <SortableItem id={folder.id} isDragging={false}>
-      <FolderItem
-        folder={folder}
-        isSelected={isSelected}
-        onClick={onClick}
-        onContextMenu={onContextMenu}
-      />
-    </SortableItem>
+    <DraggableItem 
+      item={folder} 
+      render={(folderItem, props) => (
+        <FolderItem
+          folder={folderItem}
+          isSelected={props.isSelected}
+          onClick={props.onClick}
+          onContextMenu={props.onContextMenu}
+        />
+      )}
+      onClick={onClick}
+      onContextMenu={onContextMenu}
+      isSelected={isSelected}
+      idPrefix="folder-"
+    />
   );
 }

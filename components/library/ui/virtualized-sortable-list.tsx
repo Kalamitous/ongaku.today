@@ -6,7 +6,8 @@ import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrate
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { useReorderFolders } from '@/hooks/mutations/use-reorder-folders';
 import { SortableFolder } from './draggable-folder';
-import { FolderDragOverlay } from './folder-drag-overlay';
+import { GenericDragOverlay } from './generic-drag-overlay';
+import { Folder as FolderIcon } from "lucide-react";
 import { Folder } from '@/lib/api/folders';
 
 interface VirtualizedSortableListProps {
@@ -37,7 +38,15 @@ export function VirtualizedSortableList({
   
   const overlayContent = () => {
     if (!activeFolder) return null;
-    return <FolderDragOverlay folder={activeFolder} />;
+    return (
+      <GenericDragOverlay
+        item={activeFolder}
+        icon={FolderIcon}
+        iconClassName="text-blue-500"
+        getTitle={(folder) => folder.name}
+        showChevron={true}
+      />
+    );
   };
 
   const virtualizer = useVirtualizer({

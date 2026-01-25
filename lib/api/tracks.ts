@@ -1,6 +1,6 @@
 import type { Track, CreateTrackData } from "@/types/library.types";
 import { createClient } from "@/lib/supabase/client";
-import { getPositionBetween } from "@/utils/fractional-indexing";
+import { calculateEndPosition, calculatePositionBetween } from "@/utils/position-utils";
 
 export async function createTrack(data: CreateTrackData): Promise<Track> {
   const supabase = await createClient();
@@ -13,16 +13,11 @@ export async function createTrack(data: CreateTrackData): Promise<Track> {
   }
 
   // Get position for new track (place at end)
-  const { data: lastTrack } = await supabase
-    .from('tracks')
-    .select('position')
-    .eq('user_id', user.id)
-    .eq('folder_id', data.folder_id)
-    .order('position', { ascending: false })
-    .limit(1)
-    .single();
-
-  const position = getPositionBetween(lastTrack?.position || null, null);
+  const position = await calculateEndPosition(
+    'tracks',
+    user.id,
+    data.folder_id
+  );
 
   // Insert track with user_id and position
   const { data: track, error } = await supabase
@@ -160,16 +155,11 @@ export async function moveTrackToFolder(trackId: string, newFolderId: string | n
   // If no position provided, place at end
   let finalPosition = position;
   if (!finalPosition) {
-    const { data: lastTrack } = await supabase
-      .from('tracks')
-      .select('position')
-      .eq('user_id', user.id)
-      .eq('folder_id', newFolderId)
-      .order('position', { ascending: false })
-      .limit(1)
-      .single();
-    
-    finalPosition = getPositionBetween(lastTrack?.position || null, null);
+    finalPosition = await calculateEndPosition(
+      'tracks',
+      user.id,
+      newFolderId
+    );
   }
 
   const { data: track, error } = await supabase

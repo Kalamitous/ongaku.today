@@ -1,7 +1,7 @@
 "use client";
 
 import { TrackItem } from './track-item';
-import { SortableItem } from './sortable-item';
+import { DraggableItem } from './draggable-item';
 import type { Track } from '@/types/library.types';
 
 interface DraggableTrackProps {
@@ -11,21 +11,19 @@ interface DraggableTrackProps {
 }
 
 export function DraggableTrack({ track, onClick, onContextMenu }: DraggableTrackProps) {
-  const handleClick = () => {
-    onClick?.();
-  };
-
-  const handleContextMenu = (e: React.MouseEvent) => {
-    onContextMenu?.(e);
-  };
-
   return (
-    <SortableItem id={`track-${track.id}`} isDragging={false}>
-      <TrackItem
-        track={track}
-        onClick={handleClick}
-        onContextMenu={handleContextMenu}
-      />
-    </SortableItem>
+    <DraggableItem 
+      item={track} 
+      render={(trackItem, props) => (
+        <TrackItem
+          track={trackItem}
+          onClick={props.onClick}
+          onContextMenu={props.onContextMenu}
+        />
+      )}
+      onClick={onClick}
+      onContextMenu={(e, itemId) => onContextMenu?.(e)}
+      idPrefix="track-"
+    />
   );
 }

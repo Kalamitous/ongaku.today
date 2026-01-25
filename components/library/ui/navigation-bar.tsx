@@ -57,7 +57,6 @@ export function NavigationBar({ path, onNavigateToBreadcrumb, onUpdateFolder, on
           <EditFolderDialog
             folderId={currentFolder.id}
             currentName={currentFolder.name}
-            initialParentId={actualParentId}
             onUpdate={onUpdateFolder}
             onDelete={onDelete}
             triggerButton={

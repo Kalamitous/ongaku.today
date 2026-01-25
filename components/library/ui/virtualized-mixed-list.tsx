@@ -16,8 +16,9 @@ import { DraggableTrack } from './draggable-track';
 import { FolderItem } from './folder-item';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { FolderDragOverlay } from './folder-drag-overlay';
-import { TrackDragOverlay } from './track-drag-overlay';
+import { GenericDragOverlay } from './generic-drag-overlay';
+import { Folder as FolderIcon } from "lucide-react";
+import { Music } from "lucide-react";
 import { Folder } from '@/lib/api/folders';
 import { Track } from '@/types/library.types';
 
@@ -113,9 +114,24 @@ export function VirtualizedMixedList({
     if (!activeItem) return null;
     
     if (activeItem.type === 'folder') {
-      return <FolderDragOverlay folder={activeItem.data as Folder} />;
+      return (
+        <GenericDragOverlay
+          item={activeItem.data as Folder}
+          icon={FolderIcon}
+          iconClassName="text-blue-500"
+          getTitle={(folder) => folder.name}
+          showChevron={true}
+        />
+      );
     } else {
-      return <TrackDragOverlay track={activeItem.data as Track} />;
+      return (
+        <GenericDragOverlay
+          item={activeItem.data as Track}
+          icon={Music}
+          getTitle={(track) => track.title}
+          subtitle={(activeItem.data as Track).artist || undefined}
+        />
+      );
     }
   };
 
@@ -210,7 +226,7 @@ export function VirtualizedMixedList({
       } else {
         const trackOldIndex = tracks.findIndex(t => t.id === (draggedItem.data as Track).id);
         const trackNewIndex = tracks.findIndex(t => t.id === (targetItem.data as Track).id);
-        reorderTracks.mutate({ folderId: parentId, oldIndex: trackOldIndex, newIndex: trackNewIndex });
+        reorderTracks.mutate({ parentId, oldIndex: trackOldIndex, newIndex: trackNewIndex });
       }
     } else {
       // Cross-type dragging not allowed - maintain separation between folders and tracks

@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
-import { getPositionBetween } from "@/utils/fractional-indexing";
+import { calculateEndPosition, calculatePositionBetween } from "@/utils/position-utils";
 
 export interface Folder {
   id: string;
@@ -49,11 +49,10 @@ export async function createFolder(data: CreateFolderData): Promise<Folder> {
   }
 
   // Calculate position at the end
-  const position = getPositionBetween(
-    existingFolders && existingFolders.length > 0 
-      ? existingFolders[existingFolders.length - 1].position 
-      : null,
-    null
+  const position = await calculateEndPosition(
+    'folders',
+    user.id,
+    data.parent_id || null
   );
 
   const { data: folder, error } = await supabase
@@ -260,11 +259,10 @@ export async function moveFolder(folderId: string, newParentId: string | null): 
   }
 
   // Calculate position at the end of the new parent
-  const position = getPositionBetween(
-    existingFolders && existingFolders.length > 0 
-      ? existingFolders[existingFolders.length - 1].position 
-      : null,
-    null
+  const position = await calculateEndPosition(
+    'folders',
+    user.id,
+    newParentId
   );
 
   // Update both parent_id and position atomically
